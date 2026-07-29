@@ -199,7 +199,33 @@ namespace Arbot__V_Console___V_FileData_
                 string command = G.read().ToUpper();
                 if(command == "Y")
                 {
+                    command_choice:
                     Console.Clear();
+                    G.write("Enter the command number:");
+                    G.write("1)    Add positives/credits,");
+                    G.write("2)    Add negatives,");
+                    G.write("3)    Change lesson timetable.");
+                    string choice = G.read();
+                    switch(choice)
+                    {
+                        case "1":
+                        Console.Clear();
+                        break;
+
+                        case "2":
+                        Console.Clear();
+                        break;
+
+                        case "3":
+                        Console.Clear();
+                        break;
+
+                        default:
+                        G.write("\nThat is not a number, pick off the list.");
+                        Thread.Sleep(500);
+                        Console.ReadKey();
+                        goto command_choice;
+                    }
                 } else if(command != "Y" && command != "N") {
                     G.write("Invalid");
                     Thread.Sleep(500);
