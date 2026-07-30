@@ -205,18 +205,81 @@ namespace Arbot__V_Console___V_FileData_
                     G.write("1)    Add positives/credits,");
                     G.write("2)    Add negatives,");
                     G.write("3)    Change lesson timetable.");
+                    G.write("4)    Settings");
                     string choice = G.read();
                     switch(choice)
                     {
                         case "1":
+                        start_command1:
                         Console.Clear();
+                        G.write("How many positives/credits have you gotten? :)");
+                        string middle = Console.ReadLine();
+                        if(middle != "1" && middle != "2" && middle != "3")
+                        {
+                            G.write("That is not a number.");
+                            Thread.Sleep(500);
+                            Console.ReadKey();
+                            goto start_command1;
+                        }
+                        int many = int.Parse(middle);
+                        File.WriteAllText(positives_path, (info.Positives + many).ToString());
+                        info.Positives = int.Parse(File.ReadAllText(positives_path));
+                        G.write("Done");
+                        another:
+                        G.write("Would you like to enter another command? Y/N (not case sensitive)");
+                        string choice_back = Console.ReadLine().ToUpper();
+                        if(choice_back == "Y")
+                        {
+                            goto command_choice;
+                        } else if(choice_back != "N") {
+                            G.write("Invaild");
+                            Thread.Sleep(500);
+                            Console.ReadKey();
+                            Console.SetCursorPosition(0, Console.CursorTop - 3);
+                            G.write(new string(' ', Console.WindowWidth), false);
+                            Console.SetCursorPosition(0, Console.CursorTop);
+                            goto another;
+                        }
                         break;
 
                         case "2":
+                        start_command2:
                         Console.Clear();
+                        G.write("How many negatives have you gotten? :(");
+                        middle = Console.ReadLine();
+                        if(middle != "1" && middle != "2" && middle != "3")
+                        {
+                            G.write("That is not a number.");
+                            Thread.Sleep(500);
+                            Console.ReadKey();
+                            goto start_command2;
+                        }
+                        many = int.Parse(middle);
+                        File.WriteAllText(positives_path, (info.Positives + many).ToString());
+                        info.Positives = int.Parse(File.ReadAllText(positives_path));
+                        G.write("Done");
+                        another2:
+                        G.write("Would you like to enter another command? Y/N (not case sensitive)");
+                        choice_back = Console.ReadLine().ToUpper();
+                        if(choice_back == "Y")
+                        {
+                            goto command_choice;
+                        } else if(choice_back != "N") {
+                            G.write("Invaild");
+                            Thread.Sleep(500);
+                            Console.ReadKey();
+                            Console.SetCursorPosition(0, Console.CursorTop - 3);
+                            G.write(new string(' ', Console.WindowWidth), false);
+                            Console.SetCursorPosition(0, Console.CursorTop);
+                            goto another2;
+                        }
                         break;
 
                         case "3":
+                        Console.Clear();
+                        break;
+
+                        case "4":
                         Console.Clear();
                         break;
 
