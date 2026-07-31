@@ -9,40 +9,45 @@ namespace Arbot__V_Console___V_FileData_
     {
         static void Main(string[] args)
         {
+            string settings_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Settings.txt");
+            Settings settings = new Settings(File.ReadAllText(settings_path).Split(":"));
             Random rand = new Random();
             G.write("Welcome to Arbot!");
-            Console.CursorVisible = false;
-            for(int i = 0; i <= 100; i++)
+            if(!settings.Fast_load)
             {
-                switch(i % 4)
+                Console.CursorVisible = false;
+                for(int i = 0; i <= 100; i++)
                 {
-                    case 0:
-                    G.write("Loading...");
-                    break;
+                    switch(i % 4)
+                    {
+                        case 0:
+                        G.write("Loading...");
+                        break;
 
-                    case 1:
-                    G.write("Loading..");
-                    break;
+                        case 1:
+                        G.write("Loading..");
+                        break;
 
-                    case 2:
-                    G.write("Loading.");
-                    break;
+                        case 2:
+                        G.write("Loading.");
+                        break;
 
-                    case 3:
-                    G.write("Loading");
-                    break;
+                        case 3:
+                        G.write("Loading");
+                        break;
+                    }
+                    G.write($"{i}%");
+                    if(i != 100)
+                    {
+                        Thread.Sleep(rand.Next(30, 150));
+                        Console.SetCursorPosition(0, Console.CursorTop - 2);
+                        G.write(new string(' ', Console.WindowWidth), false);
+                        Console.SetCursorPosition(0, Console.CursorTop);
+                    }
                 }
-                G.write($"{i}%");
-                if(i != 100)
-                {
-                    Thread.Sleep(rand.Next(30, 150));
-                    Console.SetCursorPosition(0, Console.CursorTop - 2);
-                    G.write(new string(' ', Console.WindowWidth), false);
-                    Console.SetCursorPosition(0, Console.CursorTop);
-                }
+                Console.CursorVisible = true;
+                G.write("\n--Finished--");
             }
-            Console.CursorVisible = true;
-            G.write("\n--Finished--");
             G.write("Press any key to continue");
             Console.ReadKey();
             int atempt_num = 3;
@@ -67,7 +72,12 @@ namespace Arbot__V_Console___V_FileData_
                 Info info = new Info(File.ReadAllText(name_path), pass, int.Parse(File.ReadAllText(positives_path)), int.Parse(File.ReadAllText(negatives_path)));
                 Timetable timetable = new Timetable(File.ReadAllText(form_path), File.ReadAllText(monday_path).Split(":"), File.ReadAllText(tuesday_path).Split(":"), File.ReadAllText(wednesday_path).Split(":"), File.ReadAllText(thursday_path).Split(":"), File.ReadAllText(friday_path).Split(":"));
                 Console.Clear();
-                G.write($"Welcome {info.Name},");
+                if(settings.Name_or_master)
+                {
+                    G.write($"Welcome {info.Name},");
+                } else {
+                    G.write("Welcome Master");
+                }
 
                 List<string> lessons = new List<string>();
                 DateTime now = DateTime.Now;
@@ -280,7 +290,56 @@ namespace Arbot__V_Console___V_FileData_
                         break;
 
                         case "4":
+                        start_command4:
                         Console.Clear();
+                        G.write("Welcome to settings!");
+                        G.write("What would you like to do?");
+                        if(settings.Fast_load)
+                        {
+                            G.write("1)    Fast loading: ");
+                            Console.BackgroundColor = ConsoleColor.White;
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            G.write("|ON []|", false);
+                            Console.BackgroundColor = ConsoleColor.Black;
+                            Console.ForegroundColor = ConsoleColor.White;
+                        } else {
+                            G.write("1)    Fast loading: |[] OFF|");
+                        }
+                        if(settings.Name_or_master)
+                        {
+                            G.write("2)    Be called by your name, not 'Master': ");
+                            Console.BackgroundColor = ConsoleColor.White;
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            G.write("|ON []|", false);
+                            Console.BackgroundColor = ConsoleColor.Black;
+                            Console.ForegroundColor = ConsoleColor.White;
+                        } else
+                        {
+                            G.write("2)     Be called by your name, not 'Master': |[] OFF|");
+                        }
+                        G.write("3)    Exit Settings");
+                        string choice2 = G.read();
+                        switch(choice2)
+                        {
+                            case "1":
+                            settings.Fast_load = !settings.Fast_load;
+                            File.WriteAllText(settings_path, $"{settings.Fast_load.ToString()}:{settings.Name_or_master.ToString()}");
+                            goto start_command4;
+                            
+                            case "2":
+                            settings.Name_or_master = !settings.Name_or_master;
+                            File.WriteAllText(settings_path, $"{settings.Fast_load.ToString()}:{settings.Name_or_master.ToString()}");
+                            goto start_command4;
+
+                            case "3":
+                            break;
+
+                            default:
+                            G.write("Invalid");
+                            Thread.Sleep(500);
+                            Console.ReadKey();
+                            goto start_command4;
+                        }
                         break;
 
                         default:
@@ -425,6 +484,16 @@ namespace Arbot__V_Console___V_FileData_
             Fri_p5 = fri[5];
             Fri_p6 = fri[6];
             Fri_home = fri[7];
+        }
+    }
+    public class Settings
+    {
+        public bool Fast_load { get; set; }
+        public bool Name_or_master { get; set; }
+        public Settings(string[] set)
+        {
+            Fast_load = bool.Parse(set[0]);
+            Name_or_master = bool.Parse(set[1]);
         }
     }
 }
