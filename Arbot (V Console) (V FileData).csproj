@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Reference Include="Easy_mode">
-      <HintPath>..\Easy_mode\bin\Release\net8.0\Easy_mode.dll</HintPath>
+      <HintPath>..\Easy_mode\bin\Debug\net8.0\Easy_mode.dll</HintPath>
     </Reference>
   </ItemGroup>
 
@@ -27,6 +27,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Data\Info\Password.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Info\Password_reset.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Data\Info\Positives.txt">
