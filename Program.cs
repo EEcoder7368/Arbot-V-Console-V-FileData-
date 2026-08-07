@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using Easy_mode;
@@ -10,8 +9,7 @@ namespace Arbot__V_Console___V_FileData_
     {
         static void Main(string[] args)
         {
-            string settings_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Settings.txt");
-            Settings settings = new Settings(File.ReadAllText(settings_path).Split(":"));
+            Settings settings = new Settings(File.ReadAllText(Settings.Settings_path).Split(":"));
             Random rand = new Random();
             G.write("Welcome to Arbot!");
             if(!settings.Fast_load)
@@ -68,7 +66,7 @@ namespace Arbot__V_Console___V_FileData_
                     File.WriteAllText(Info.password_path, Generate());
                     G.write(File.ReadAllText(Info.password_path));
                 } else {
-                    G.write("Incorrect");
+                    G.write("\nIncorrect");
                     Thread.Sleep(500);
                     Console.ReadKey();
                 }
@@ -221,7 +219,8 @@ namespace Arbot__V_Console___V_FileData_
                     G.write("2)    Add negatives,");
                     G.write("3)    Change lesson timetable,");
                     G.write("4)    Settings,");
-                    G.write("5)    Back to home screen.");
+                    G.write("5)    Back to home screen,");
+                    G.write("6)    Exit.");
                     string choice = G.read();
                     switch(choice)
                     {
@@ -241,22 +240,9 @@ namespace Arbot__V_Console___V_FileData_
                         File.WriteAllText(Info.positives_path, (info.Positives + many1).ToString());
                         info.Positives = int.Parse(File.ReadAllText(Info.positives_path));
                         G.write("Done");
-                        another:
-                        G.write("Would you like to enter another command? Y/N (not case sensitive)");
-                        string choice_back = Console.ReadLine().ToUpper();
-                        if(choice_back == "Y")
-                        {
-                            goto command_choice;
-                        } else if(choice_back != "N") {
-                            G.write("Invaild");
-                            Thread.Sleep(500);
-                            Console.ReadKey();
-                            Console.SetCursorPosition(0, Console.CursorTop - 3);
-                            G.write(new string(' ', Console.WindowWidth), false);
-                            Console.SetCursorPosition(0, Console.CursorTop);
-                            goto another;
-                        }
-                        break;
+                        G.write("Press any key");
+                        Console.ReadKey();
+                        goto command_choice;
 
                         case "2":
                         start_command2:
@@ -274,22 +260,9 @@ namespace Arbot__V_Console___V_FileData_
                         File.WriteAllText(Info.positives_path, (info.Positives + many2).ToString());
                         info.Positives = int.Parse(File.ReadAllText(Info.positives_path));
                         G.write("Done");
-                        another2:
-                        G.write("Would you like to enter another command? Y/N");
-                        choice_back = Console.ReadLine().ToUpper();
-                        if(choice_back == "Y")
-                        {
-                            goto command_choice;
-                        } else if(choice_back != "N") {
-                            G.write("Invaild");
-                            Thread.Sleep(500);
-                            Console.ReadKey();
-                            Console.SetCursorPosition(0, Console.CursorTop - 3);
-                            G.write(new string(' ', Console.WindowWidth), false);
-                            Console.SetCursorPosition(0, Console.CursorTop);
-                            goto another2;
-                        }
-                        break;
+                        G.write("Press any key");
+                        Console.ReadKey();
+                        goto command_choice;
 
                         case "3":
                         start_command3:
@@ -390,7 +363,9 @@ namespace Arbot__V_Console___V_FileData_
                             Thread.Sleep(500);
                             goto start_command3;
                         }
-                        break;
+                        G.write("Press any key");
+                        Console.ReadKey();
+                        goto command_choice;
 
                         case "4":
                         start_command4:
@@ -429,12 +404,12 @@ namespace Arbot__V_Console___V_FileData_
                         {
                             case "1":
                             settings.Fast_load = !settings.Fast_load;
-                            File.WriteAllText(settings_path, $"{settings.Fast_load.ToString()}:{settings.Name_or_master.ToString()}");
+                            File.WriteAllText(Settings.Settings_path, $"{settings.Fast_load.ToString()}:{settings.Name_or_master.ToString()}");
                             goto start_command4;
                             
                             case "2":
                             settings.Name_or_master = !settings.Name_or_master;
-                            File.WriteAllText(settings_path, $"{settings.Fast_load.ToString()}:{settings.Name_or_master.ToString()}");
+                            File.WriteAllText(Settings.Settings_path, $"{settings.Fast_load.ToString()}:{settings.Name_or_master.ToString()}");
                             goto start_command4;
 
                             case "3":
@@ -485,9 +460,11 @@ namespace Arbot__V_Console___V_FileData_
                             string clear = Console.ReadLine();
                             if (clear.ToLower() == "p")
                             {
-
+                                File.WriteAllText(Info.positives_path, "0");
+                                info.Positives = 0;
                             } else if (clear.ToLower() == "n") {
-
+                                File.WriteAllText(Info.negatives_path, "0");
+                                info.Negatives = 0;
                             } else {
                                 G.write("Invalid");
                                 Thread.Sleep(500);
@@ -498,7 +475,7 @@ namespace Arbot__V_Console___V_FileData_
                             break;
 
                             case "6":
-                            break;
+                            goto home;
 
                             default:
                             G.write("Invalid");
@@ -506,10 +483,15 @@ namespace Arbot__V_Console___V_FileData_
                             Console.ReadKey();
                             goto start_command4;
                         }
-                        break;
+                        G.write("Press any key");
+                        Console.ReadKey();
+                        goto command_choice;
 
                         case "5":
                         goto home;
+
+                        case "6":
+                        break;
 
                         default:
                         G.write("\nThat is not a number, pick off the list.");
@@ -538,7 +520,7 @@ namespace Arbot__V_Console___V_FileData_
                     goto start;
                 }
             }
-            G.write("\nPress any key to exit:");
+            G.write("\nPress any key to exit...");
             Console.ReadKey();
         }
 
@@ -935,6 +917,9 @@ namespace Arbot__V_Console___V_FileData_
     {
         public bool Fast_load { get; set; }
         public bool Name_or_master { get; set; }
+
+        public static string Settings_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Settings.txt");
+
         public Settings(string[] set)
         {
             Fast_load = bool.Parse(set[0]);
