@@ -19,12 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Easy_mode">
-      <HintPath>..\Easy_mode\bin\Debug\net8.0\Easy_mode.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Data\Info\Name.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
