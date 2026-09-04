@@ -1,85 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Raylib_cs;
 using Easy_mode;
 
 namespace Arbot__V_Console___V_FileData_
 {
-    public class Program
+    public class Window
     {
-        static void Main(string[] args)
+        static void Program()
         {
-            Settings settings = new Settings(File.ReadAllText(Settings.Settings_path).Split(":"));
+            Settings.settings(File.ReadAllText(Settings.Settings_path).Split(":"));
             Random rand = new Random();
-            G.write("Welcome to Arbot!");
-            if(!settings.Fast_load)
+            write("Welcome to Arbot!");
+            if(!Settings.Fast_load)
             {
-                Console.CursorVisible = false;
                 for(int i = 0; i <= 100; i++)
                 {
                     switch(i % 4)
                     {
                         case 0:
-                        G.write("Loading...");
+                        write("Loading...");
                         break;
 
                         case 1:
-                        G.write("Loading..");
+                        write("Loading..");
                         break;
 
                         case 2:
-                        G.write("Loading.");
+                        write("Loading.");
                         break;
 
                         case 3:
-                        G.write("Loading");
+                        write("Loading");
                         break;
                     }
-                    G.write($"{i}%");
+                    write($"{i}%");
                     if(i != 100)
                     {
                         Thread.Sleep(rand.Next(30, 150));
-                        Console.SetCursorPosition(0, Console.CursorTop - 2);
-                        G.write(new string(' ', Console.WindowWidth), false);
-                        Console.SetCursorPosition(0, Console.CursorTop);
+                        back(3);
                     }
                 }
-                Console.CursorVisible = true;
-                G.write("\n--Finished--");
+                write("\n--Finished--");
             }
-            G.write("Press any key to continue");
-            Console.ReadKey();
+            write("Press any key to continue");
+            read_key();
             int atempt_num = 3;
             start:
-            Console.Clear();
+            clear();
 
-            G.write("Please enter your password: (type 'forgot' to view password)");
-            string pass = Specielized.Encript_input("*");
+            write("Please enter your password: (type 'forgot' to view password)");
+            string pass = read('*');
 
             if(pass.ToLower() == "forgot") {
-                Console.Clear();
-                G.write("Enter your password reset token:");
-                string token = Specielized.Encript_input("*");
+                clear();
+                write("Enter your password reset token:");
+                string token = read('*');
                 if(token == File.ReadAllText(Info.password_reset_path))
                 {
-                    G.write("\nYour reset password is:");
+                    write("\nYour reset password is:");
                     File.WriteAllText(Info.password_path, Generate());
-                    G.write(File.ReadAllText(Info.password_path));
+                    write(File.ReadAllText(Info.password_path));
+                    write("\n It is recomended to generate a new password reset token after use.");
                 } else {
-                    G.write("\nIncorrect");
+                    write("\nIncorrect");
                     Thread.Sleep(500);
-                    Console.ReadKey();
+                    read_key();
                 }
             } else if(pass == File.ReadAllText(Info.password_path)) {
-                Info info = new Info(File.ReadAllText(Info.name_path), pass, int.Parse(File.ReadAllText(Info.positives_path)), int.Parse(File.ReadAllText(Info.negatives_path)), File.ReadAllText(Info.password_reset_path));
-                Timetable timetable = new Timetable(File.ReadAllText(Timetable.form_path), File.ReadAllText(Timetable.monday_path).Split(":"), File.ReadAllText(Timetable.tuesday_path).Split(":"), File.ReadAllText(Timetable.wednesday_path).Split(":"), File.ReadAllText(Timetable.thursday_path).Split(":"), File.ReadAllText(Timetable.friday_path).Split(":"));
+                Info.info(File.ReadAllText(Info.name_path), pass, int.Parse(File.ReadAllText(Info.positives_path)), int.Parse(File.ReadAllText(Info.negatives_path)), File.ReadAllText(Info.password_reset_path));
+                Timetable.timetable(File.ReadAllText(Timetable.form_path), File.ReadAllText(Timetable.monday_path).Split(":"), File.ReadAllText(Timetable.tuesday_path).Split(":"), File.ReadAllText(Timetable.wednesday_path).Split(":"), File.ReadAllText(Timetable.thursday_path).Split(":"), File.ReadAllText(Timetable.friday_path).Split(":"));
                 home:
-                Console.Clear();
-                if(settings.Name_or_master)
+                clear();
+                if(Settings.Name_or_master)
                 {
-                    G.write($"Welcome {info.Name},");
+                    write($"Welcome {Info.Name},");
                 } else {
-                    G.write("Welcome Master,");
+                    write("Welcome Master,");
                 }
 
                 List<string> lessons = new List<string>();
@@ -156,23 +154,23 @@ namespace Arbot__V_Console___V_FileData_
                 switch (today_weekday)
                 {
                     case DayOfWeek.Monday:
-                        lessons = new List<string> { timetable.Form, timetable.Mon_p1, timetable.Mon_p2, "Breaktime", timetable.Mon_p3, timetable.Mon_p4, timetable.Mon_lunch, timetable.Mon_p5, timetable.Mon_p6, timetable.Mon_home };
+                        lessons = new List<string> { Timetable.Form, Timetable.Mon_p1, Timetable.Mon_p2, "Breaktime", Timetable.Mon_p3, Timetable.Mon_p4, Timetable.Mon_lunch, Timetable.Mon_p5, Timetable.Mon_p6, Timetable.Mon_home };
                         break;
 
                     case DayOfWeek.Tuesday:
-                        lessons = new List<string> { timetable.Form, timetable.Tue_p1, timetable.Tue_p2, "Breaktime", timetable.Tue_p3, timetable.Tue_p4, timetable.Tue_lunch, timetable.Tue_p5, timetable.Tue_p6, timetable.Tue_home };
+                        lessons = new List<string> { Timetable.Form, Timetable.Tue_p1, Timetable.Tue_p2, "Breaktime", Timetable.Tue_p3, Timetable.Tue_p4, Timetable.Tue_lunch, Timetable.Tue_p5, Timetable.Tue_p6, Timetable.Tue_home };
                         break;
 
                     case DayOfWeek.Wednesday:
-                        lessons = new List<string> { timetable.Form, timetable.Wed_p1, timetable.Wed_p2, "Breaktime", timetable.Wed_p3, timetable.Wed_p4, timetable.Wed_lunch, timetable.Wed_p5, timetable.Wed_p6, timetable.Wed_home };
+                        lessons = new List<string> { Timetable.Form, Timetable.Wed_p1, Timetable.Wed_p2, "Breaktime", Timetable.Wed_p3, Timetable.Wed_p4, Timetable.Wed_lunch, Timetable.Wed_p5, Timetable.Wed_p6, Timetable.Wed_home };
                         break;
 
                     case DayOfWeek.Thursday:
-                        lessons = new List<string> { timetable.Form, timetable.Thu_p1, timetable.Thu_p2, "Breaktime", timetable.Thu_p3, timetable.Thu_p4, timetable.Thu_lunch, timetable.Thu_p5, timetable.Thu_p6, timetable.Thu_home };
+                        lessons = new List<string> { Timetable.Form, Timetable.Thu_p1, Timetable.Thu_p2, "Breaktime", Timetable.Thu_p3, Timetable.Thu_p4, Timetable.Thu_lunch, Timetable.Thu_p5, Timetable.Thu_p6, Timetable.Thu_home };
                         break;
 
                     case DayOfWeek.Friday:
-                        lessons = new List<string> { timetable.Form, timetable.Fri_p1, timetable.Fri_p2, "Breaktime", timetable.Fri_p3, timetable.Fri_p4, timetable.Fri_lunch, timetable.Fri_p5, timetable.Fri_p6, timetable.Fri_home };
+                        lessons = new List<string> { Timetable.Form, Timetable.Fri_p1, Timetable.Fri_p2, "Breaktime", Timetable.Fri_p3, Timetable.Fri_p4, Timetable.Fri_lunch, Timetable.Fri_p5, Timetable.Fri_p6, Timetable.Fri_home };
                         break;
 
                     case DayOfWeek.Saturday:
@@ -194,84 +192,85 @@ namespace Arbot__V_Console___V_FileData_
                 {
                     if (cal2 >= TimeSpan.Parse("00:00:00"))
                     {
-                        Console.WriteLine($"The day is {today_weekday} and we are in the {period}^th period of the day and the current lesson is {current_lesson} and the next lesson is {next_lesson}. The next bell is at {next_bell} and it is in {calculation} hours, minutes and seconds respectively.");
+                        write($"The day is {today_weekday} and we are in the {period}^th period of the day and the current lesson is {current_lesson} and the next lesson is {next_lesson}. The next bell is at {next_bell} and it is in {calculation} hours, minutes and seconds respectively.");
                     }
                 }
 
                 if (cal2 <= TimeSpan.Parse("00:00:00") || today_weekday == DayOfWeek.Saturday || today_weekday == DayOfWeek.Sunday)
                 {
-                    Console.WriteLine($"The day is {today_weekday} and there are no lessons on.");
+                    write($"The day is {today_weekday} and there are no lessons on.");
                 }
 
-                Console.WriteLine("");
-                Console.WriteLine($"You have: {info.Positives} positive(s),");
-                Console.WriteLine($"You have: {info.Negatives} negative(s),");
+                write("");
+                write($"You have: {Info.Positives} positive(s),");
+                write($"You have: {Info.Negatives} negative(s),");
 
                 enter_command:
-                G.write("\nWould you like to enter a command? Y/N");
-                string command = G.read().ToUpper();
+                write("\nWould you like to enter a command? Y/N");
+                string command = read(null).ToUpper();
                 if(command == "Y")
                 {
                     command_choice:
-                    Console.Clear();
-                    G.write("Enter the command number:");
-                    G.write("1)    Add positives/credits,");
-                    G.write("2)    Add negatives,");
-                    G.write("3)    Change lesson timetable,");
-                    G.write("4)    Settings,");
-                    G.write("5)    Back to home screen,");
-                    G.write("6)    Exit.");
-                    string choice = G.read();
+                    clear();
+                    write("If you encounter any bugs please email hyper.games.company@gmail.com. \n(with a screen shot of the bug and how to replicate it)");
+                    write("Enter the command number:");
+                    write("1)    Add positives/credits,");
+                    write("2)    Add negatives,");
+                    write("3)    Change lesson Timetable,");
+                    write("4)    Settings,");
+                    write("5)    Back to home screen,");
+                    write("6)    Exit.");
+                    string choice = read(null);
                     switch(choice)
                     {
                         case "1":
                         start_command1:
-                        Console.Clear();
-                        G.write("How many positives/credits have you gotten? :)");
-                        string middle = Console.ReadLine();
+                        clear();
+                        write("How many positives/credits have you gotten? :)");
+                        string middle = read(null);
                         if(int.TryParse(middle, out int i1))
                         {
-                            G.write("That is not a number.");
+                            write("That is not a number.");
                             Thread.Sleep(500);
-                            Console.ReadKey();
+                            read_key();
                             goto start_command1;
                         }
                         int many1 = i1;
-                        File.WriteAllText(Info.positives_path, (info.Positives + many1).ToString());
-                        info.Positives = int.Parse(File.ReadAllText(Info.positives_path));
-                        G.write("Done");
-                        G.write("Press any key");
-                        Console.ReadKey();
+                        File.WriteAllText(Info.positives_path, (Info.Positives + many1).ToString());
+                        Info.Positives = int.Parse(File.ReadAllText(Info.positives_path));
+                        write("Done");
+                        write("Press any key");
+                        read_key();
                         goto command_choice;
 
                         case "2":
                         start_command2:
-                        Console.Clear();
-                        G.write("How many negatives have you gotten? :(");
-                        middle = Console.ReadLine();
+                        clear();
+                        write("How many negatives have you gotten? :(");
+                        middle = read(null);
                         if(int.TryParse(middle, out int i2))
                         {
-                            G.write("That is not a number.");
+                            write("That is not a number.");
                             Thread.Sleep(500);
-                            Console.ReadKey();
+                            read_key();
                             goto start_command2;
                         }
                         int many2 = i2;
-                        File.WriteAllText(Info.positives_path, (info.Positives + many2).ToString());
-                        info.Positives = int.Parse(File.ReadAllText(Info.positives_path));
-                        G.write("Done");
-                        G.write("Press any key");
-                        Console.ReadKey();
+                        File.WriteAllText(Info.positives_path, (Info.Positives + many2).ToString());
+                        Info.Positives = int.Parse(File.ReadAllText(Info.positives_path));
+                        write("Done");
+                        write("Press any key");
+                        read_key();
                         goto command_choice;
 
                         case "3":
                         start_command3:
-                        Console.Clear();
-                        G.write("What day do you want to change something in? \nYou can type the first 3 letters of that day (excluding if you type 'form' to change your form room)");
-                        string day = Console.ReadLine();
+                        clear();
+                        write("What day do you want to change something in? \nYou can type the first 3 letters of that day (excluding if you type 'form' to change your form room)");
+                        string day = read(null);
                         start_command3_1:
-                        G.write("What number period do you want to change? \n(type 'lunch' for a lunch time club or type 'home' for a home time club)");
-                        string period2 = Console.ReadLine();
+                        write("What number period do you want to change? \n(type 'lunch' for a lunch time club or type 'home' for a home time club)");
+                        string period2 = read(null);
                         switch(day.ToLower())
                         {
                             case "monday":
@@ -279,13 +278,11 @@ namespace Arbot__V_Console___V_FileData_
                             int o = 0;
                             if(int.TryParse(period2, out o) || period2.ToLower() == "lunch" || period2.ToLower() == "home")
                             {
-                                timetable = Change_timetable(timetable, "mon", period2);
+                                Change_timetable("mon", period2);
                             } else {
-                                G.write("\nPeriod is not a number");
+                                write("\nPeriod is not a number");
                                 Thread.Sleep(500);
-                                Console.SetCursorPosition(0, Console.CursorTop - 4);
-                                G.write(new string(' ', Console.WindowWidth), false);
-                                Console.SetCursorPosition(0, Console.CursorTop);
+                                back(4);
                                 goto start_command3_1;
                             }
                             break;
@@ -295,13 +292,11 @@ namespace Arbot__V_Console___V_FileData_
                             o = 0;
                             if(int.TryParse(period2, out o) || period2.ToLower() == "lunch" || period2.ToLower() == "home")
                             {
-                                timetable = Change_timetable(timetable, "tue", period2);
+                                Change_timetable("tue", period2);
                             } else {
-                                G.write("\nPeriod is not a number");
+                                write("\nPeriod is not a number");
                                 Thread.Sleep(500);
-                                Console.SetCursorPosition(0, Console.CursorTop - 4);
-                                G.write(new string(' ', Console.WindowWidth), false);
-                                Console.SetCursorPosition(0, Console.CursorTop);
+                                back(4);
                                 goto start_command3_1;
                             }
                             break;
@@ -311,13 +306,11 @@ namespace Arbot__V_Console___V_FileData_
                             o = 0;
                             if(int.TryParse(period2, out o) || period2.ToLower() == "lunch" || period2.ToLower() == "home")
                             {
-                                timetable = Change_timetable(timetable, "wed", period2);
+                                Change_timetable("wed", period2);
                             } else {
-                                G.write("\nPeriod is not a number");
+                                write("\nPeriod is not a number");
                                 Thread.Sleep(500);
-                                Console.SetCursorPosition(0, Console.CursorTop - 4);
-                                G.write(new string(' ', Console.WindowWidth), false);
-                                Console.SetCursorPosition(0, Console.CursorTop);
+                                back(4);
                                 goto start_command3_1;
                             }
                             break;
@@ -327,13 +320,11 @@ namespace Arbot__V_Console___V_FileData_
                             o = 0;
                             if(int.TryParse(period2, out o) || period2.ToLower() == "lunch" || period2.ToLower() == "home")
                             {
-                                timetable = Change_timetable(timetable, "thu", period2);
+                                Change_timetable("thu", period2);
                             } else {
-                                G.write("\nPeriod is not a number");
+                                write("\nPeriod is not a number");
                                 Thread.Sleep(500);
-                                Console.SetCursorPosition(0, Console.CursorTop - 4);
-                                G.write(new string(' ', Console.WindowWidth), false);
-                                Console.SetCursorPosition(0, Console.CursorTop);
+                                back(4);
                                 goto start_command3_1;
                             }
                             break;
@@ -343,149 +334,176 @@ namespace Arbot__V_Console___V_FileData_
                             o = 0;
                             if(int.TryParse(period2, out o) || period2.ToLower() == "lunch" || period2.ToLower() == "home")
                             {
-                                timetable = Change_timetable(timetable, "fri", period2);
+                                Change_timetable("fri", period2);
                             } else {
-                                G.write("\nPeriod is not a number");
+                                write("\nPeriod is not a number");
                                 Thread.Sleep(500);
-                                Console.SetCursorPosition(0, Console.CursorTop - 4);
-                                G.write(new string(' ', Console.WindowWidth), false);
-                                Console.SetCursorPosition(0, Console.CursorTop);
+                                back(4);
                                 goto start_command3_1;
                             }
                             break;
 
                             case "form":
-                            timetable = Change_form(timetable);
+                            Change_form();
                             break;
 
                             default:
-                            G.write("Invalid");
+                            write("Invalid");
                             Thread.Sleep(500);
                             goto start_command3;
                         }
-                        G.write("Press any key");
-                        Console.ReadKey();
+                        write("Press any key");
+                        read_key();
                         goto command_choice;
 
                         case "4":
                         start_command4:
-                        Console.Clear();
-                        G.write("Welcome to settings!");
-                        G.write("What would you like to do?");
-                        if(settings.Fast_load)
+                        clear();
+                        write("Welcome to Settings!");
+                        write("What would you like to do?");
+                        if(Settings.Fast_load)
                         {
-                            G.write("1)    Fast loading: ", false);
-                            Console.BackgroundColor = ConsoleColor.White;
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            G.write("|ON []|");
-                            Console.BackgroundColor = ConsoleColor.Black;
-                            Console.ForegroundColor = ConsoleColor.White;
+                            write("1)    Fast loading: ", false);
+                            Inverse();
+                            write("|ON []|");
+                            Inverse();
                         } else {
-                            G.write("1)    Fast loading: |[] OFF|");
+                            write("1)    Fast loading: |[] OFF|");
                         }
-                        if(settings.Name_or_master)
+                        if(Settings.Name_or_master)
                         {
-                            G.write("2)    Be called by your name, not 'Master': ", false);
-                            Console.BackgroundColor = ConsoleColor.White;
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            G.write("|ON []|");
-                            Console.BackgroundColor = ConsoleColor.Black;
-                            Console.ForegroundColor = ConsoleColor.White;
-                        } else
-                        {
-                            G.write("2)    Be called by your name, not 'Master': |[] OFF|");
+                            write("2)    Be called by your name, not 'Master': ", false);
+                            Inverse();
+                            write("|ON []|");
+                            Inverse();
+                        } else {
+                            write("2)    Be called by your name, not 'Master': |[] OFF|");
                         }
-                        G.write("3)    Change your password");
-                        G.write("4)    Generate password reset token");
-                        G.write("5)    Clear positives/negatives");
-                        G.write("6)    Exit Settings");
-                        string choice2 = G.read();
+                        if(Settings.Dark_mode)
+                        {
+                            write("3)    Dark mode: ", false);
+                            Inverse();
+                            write("|ON []|");
+                            Inverse();
+                        } else {
+                            write("3)    Dark mode: |[] OFF|");
+                        }
+                        write("4)    Change your password");
+                        write("5)    Change your name");
+                        write("6)    Generate password reset token");
+                        write("7)    Clear positives/negatives");
+                        write("8)    Exit Settings");
+                        string choice2 = read(null);
                         switch(choice2)
                         {
                             case "1":
-                            settings.Fast_load = !settings.Fast_load;
-                            File.WriteAllText(Settings.Settings_path, $"{settings.Fast_load.ToString()}:{settings.Name_or_master.ToString()}");
+                            Settings.Fast_load = !Settings.Fast_load;
+                            File.WriteAllText(Settings.Settings_path, $"{Settings.Fast_load.ToString()}:{Settings.Name_or_master.ToString()}:{Settings.Dark_mode.ToString()}");
                             goto start_command4;
                             
                             case "2":
-                            settings.Name_or_master = !settings.Name_or_master;
-                            File.WriteAllText(Settings.Settings_path, $"{settings.Fast_load.ToString()}:{settings.Name_or_master.ToString()}");
+                            Settings.Name_or_master = !Settings.Name_or_master;
+                            File.WriteAllText(Settings.Settings_path, $"{Settings.Fast_load.ToString()}:{Settings.Name_or_master.ToString()}:{Settings.Dark_mode.ToString()}");
                             goto start_command4;
 
                             case "3":
+                            Inverse();
+                            Settings.Dark_mode = !Settings.Dark_mode;
+                            File.WriteAllText(Settings.Settings_path, $"{Settings.Fast_load.ToString()}:{Settings.Name_or_master.ToString()}:{Settings.Dark_mode.ToString()}");
+                            goto start_command4;
+
+                            case "4":
                             start_command4_1:
-                            Console.Clear();
-                            G.write("Enter your old password");
-                            string old = Specielized.Encript_input("*");
-                            if(old == info.Password)
+                            Window.clear();
+                            write("Enter your old password");
+                            string old = read('*');
+                            if(old == Info.Password)
                             {
                                 new_pass_start:
-                                G.write("\nEnter new password:");
-                                string new_pass = Specielized.Encript_input("*");
-                                G.write("\nRenter new password:");
-                                if(new_pass != Specielized.Encript_input("*"))
+                                write("\nEnter new password:");
+                                string new_pass = read('*');
+                                write("\nRe-enter new password:");
+                                if(new_pass != read('*'))
                                 {
-                                    G.write("\nPasswords do not match");
+                                    write("\nPasswords do not match");
                                     Thread.Sleep(500);
-                                    G.write("Press any key to continue");
-                                    Console.ReadKey();
-                                    Console.SetCursorPosition(0, Console.CursorTop - 8);
-                                    G.write(new string(' ', Console.WindowWidth), false);
-                                    Console.SetCursorPosition(0, Console.CursorTop);
+                                    write("Press any key to continue");
+                                    read_key();
+                                    back(8);
                                     goto new_pass_start;
                                 }
                                 File.WriteAllText(Info.password_path, new_pass);
-                                info.Password = File.ReadAllText(Info.password_path);
-                                G.write("\nDone");
-                                Console.ReadKey();
+                                Info.Password = File.ReadAllText(Info.password_path);
+                                write("\nDone");
+                                read_key();
                                 goto start_command4;
                             } else {
-                                G.write("\nWrong Password");
+                                write("\nWrong Password");
                                 Thread.Sleep(500);
-                                Console.ReadKey();
+                                read_key();
                                 goto start_command4_1;
                             }
 
-                            case "4":
-                            File.WriteAllText(Info.password_reset_path, rand.Next(0000, 1000).ToString());
-                            info.Password_reset_token = File.ReadAllText(Info.password_reset_path);
-                            G.write("Your password reset token is:");
-                            G.write(info.Password_reset_token);
-                            break;
-
                             case "5":
+                            Window.clear();
+                            write("Enter your new name");
+                            File.WriteAllText(Info.name_path, G.read());
+                            Info.Name = File.ReadAllText(Info.name_path);
+                            write("Done");
+                            write("Press any key to continue");
+                            read_key();
+                            goto start_command4;
+
+                            case "6":
+                            string r = rand.Next(0000, 10000).ToString();
+                            while(r.Length < 4)
+                            {
+                                r = "0" + r;
+                            }
+                            File.WriteAllText(Info.password_reset_path, r);
+                            Info.Password_reset_token = File.ReadAllText(Info.password_reset_path);
+                            write("Your password reset token is:");
+                            write(Info.Password_reset_token);
+                            write("Press any key to continue");
+                            read_key();
+                            goto start_command4;
+
+                            case "7":
                             start_command4_2:
-                            Console.Clear();
-                            G.write("\nWould you like to clear Positives(p) or Negatives(n)?");
-                            string clear = Console.ReadLine();
+                            Window.clear();
+                            write("\nWould you like to clear Positives(p) or Negatives(n)?");
+                            string clear = read(null);
                             if (clear.ToLower() == "p")
                             {
                                 File.WriteAllText(Info.positives_path, "0");
-                                info.Positives = 0;
+                                Info.Positives = 0;
+                                write("Done");
+                                write("Press any key to continue");
+                                read_key();
                             } else if (clear.ToLower() == "n") {
                                 File.WriteAllText(Info.negatives_path, "0");
-                                info.Negatives = 0;
+                                Info.Negatives = 0;
+                                write("Done");
+                                write("Press any key to continue");
+                                read_key();
                             } else {
-                                G.write("Invalid");
+                                write("Invalid");
                                 Thread.Sleep(500);
-                                G.write("Press any key to continue");
-                                Console.ReadKey();
+                                write("Press any key to continue");
+                                read_key();
                                 goto start_command4_2;
                             }
-                            break;
+                            goto start_command4;
 
-                            case "6":
-                            goto home;
+                            case "8":
+                            goto command_choice;
 
                             default:
-                            G.write("Invalid");
+                            write("Invalid");
                             Thread.Sleep(500);
-                            Console.ReadKey();
+                            read_key();
                             goto start_command4;
                         }
-                        G.write("Press any key");
-                        Console.ReadKey();
-                        goto command_choice;
 
                         case "5":
                         goto home;
@@ -494,34 +512,33 @@ namespace Arbot__V_Console___V_FileData_
                         break;
 
                         default:
-                        G.write("\nThat is not a number, pick off the list.");
+                        write("\nThat is not a number, pick off the list.");
                         Thread.Sleep(500);
-                        Console.ReadKey();
+                        read_key();
                         goto command_choice;
                     }
                 } else if(command != "Y" && command != "N") {
-                    G.write("Invalid");
+                    write("Invalid");
                     Thread.Sleep(500);
-                    Console.ReadKey();
-                    Console.SetCursorPosition(0, Console.CursorTop - 3);
-                    G.write(new string(' ', Console.WindowWidth), false);
-                    Console.SetCursorPosition(0, Console.CursorTop);
+                    read_key();
+                    back(3);
                     goto enter_command;
                 }
             } else {
                 atempt_num--;
-                G.write("\nWrong Password");
-                G.write($"{atempt_num} atempts left.");
+                write("\nWrong Password");
+                write($"{atempt_num} atempts left.");
                 Thread.Sleep(500);
-                G.write("Press any key to try again");
-                Console.ReadKey();
+                write("Press any key to try again");
+                read_key();
                 if(atempt_num != 0)
                 {
                     goto start;
                 }
             }
-            G.write("\nPress any key to exit...");
-            Console.ReadKey();
+            write("\nPress any key to exit...");
+            read_key();
+            kill_terminal();
         }
 
         public static string Generate()
@@ -530,7 +547,7 @@ namespace Arbot__V_Console___V_FileData_
             string s = "";
             for(int i = 0; i <= 3; i++)
             {
-                Letters middle = (Letters)rand.Next(1, 63);
+                Letters middle = (Letters)rand.Next(1, 65);
                 switch(middle)
                 {
                     case Letters.n0:
@@ -562,6 +579,13 @@ namespace Arbot__V_Console___V_FileData_
                     break;
                     case Letters.n9:
                     s += "9";
+                    break;
+
+                    case Letters.Underscore:
+                    s += "_";
+                    break;
+                    case Letters.Dash:
+                    s += "-";
                     break;
 
                     default:
@@ -635,163 +659,297 @@ namespace Arbot__V_Console___V_FileData_
             n6,
             n7,
             n8,
-            n9
+            n9,
+            Underscore,
+            Dash,
         }
 
-        public static Timetable Change_timetable(Timetable timetable, string day, string period)
+        public static void Change_timetable(string day, string period)
         {
-            G.write("What lesson/club are you changing it to?");
-            string change = Console.ReadLine();
-            G.write("What room is it?");
-            change = change + " " + Console.ReadLine();
+            write("What lesson/club are you changing it to?");
+            string change = read(null);
+            write("What room is it?");
+            change = change + " " + read(null);
             string time = day + "_p" + period;
             switch(time)
             {
                 case "mon_p1":
-                File.WriteAllText(Timetable.monday_path, $"{change}:{timetable.Mon_p2}:{timetable.Mon_p3}:{timetable.Mon_p4}:{timetable.Mon_lunch}:{timetable.Mon_p5}:{timetable.Mon_p6}:{timetable.Mon_home}");
+                File.WriteAllText(Timetable.monday_path, $"{change}:{Timetable.Mon_p2}:{Timetable.Mon_p3}:{Timetable.Mon_p4}:{Timetable.Mon_lunch}:{Timetable.Mon_p5}:{Timetable.Mon_p6}:{Timetable.Mon_home}");
                 break;
                 case "mon_p2":
-                File.WriteAllText(Timetable.monday_path, $"{timetable.Mon_p1}:{change}:{timetable.Mon_p3}:{timetable.Mon_p4}:{timetable.Mon_lunch}:{timetable.Mon_p5}:{timetable.Mon_p6}:{timetable.Mon_home}");
+                File.WriteAllText(Timetable.monday_path, $"{Timetable.Mon_p1}:{change}:{Timetable.Mon_p3}:{Timetable.Mon_p4}:{Timetable.Mon_lunch}:{Timetable.Mon_p5}:{Timetable.Mon_p6}:{Timetable.Mon_home}");
                 break;
                 case "mon_p3":
-                File.WriteAllText(Timetable.monday_path, $"{timetable.Mon_p1}:{timetable.Mon_p2}:{change}:{timetable.Mon_p4}:{timetable.Mon_lunch}:{timetable.Mon_p5}:{timetable.Mon_p6}:{timetable.Mon_home}");
+                File.WriteAllText(Timetable.monday_path, $"{Timetable.Mon_p1}:{Timetable.Mon_p2}:{change}:{Timetable.Mon_p4}:{Timetable.Mon_lunch}:{Timetable.Mon_p5}:{Timetable.Mon_p6}:{Timetable.Mon_home}");
                 break;
                 case "mon_p4":
-                File.WriteAllText(Timetable.monday_path, $"{timetable.Mon_p1}:{timetable.Mon_p2}:{timetable.Mon_p3}:{change}:{timetable.Mon_lunch}:{timetable.Mon_p5}:{timetable.Mon_p6}:{timetable.Mon_home}");
+                File.WriteAllText(Timetable.monday_path, $"{Timetable.Mon_p1}:{Timetable.Mon_p2}:{Timetable.Mon_p3}:{change}:{Timetable.Mon_lunch}:{Timetable.Mon_p5}:{Timetable.Mon_p6}:{Timetable.Mon_home}");
                 break;
                 case "mon_plunch":
-                File.WriteAllText(Timetable.monday_path, $"{timetable.Mon_p1}:{timetable.Mon_p2}:{timetable.Mon_p3}:{timetable.Mon_p4}:{change}:{timetable.Mon_p5}:{timetable.Mon_p6}:{timetable.Mon_home}");
+                File.WriteAllText(Timetable.monday_path, $"{Timetable.Mon_p1}:{Timetable.Mon_p2}:{Timetable.Mon_p3}:{Timetable.Mon_p4}:{change}:{Timetable.Mon_p5}:{Timetable.Mon_p6}:{Timetable.Mon_home}");
                 break;
                 case "mon_p5":
-                File.WriteAllText(Timetable.monday_path, $"{timetable.Mon_p1}:{timetable.Mon_p2}:{timetable.Mon_p3}:{timetable.Mon_p4}:{timetable.Mon_lunch}:{change}:{timetable.Mon_p6}:{timetable.Mon_home}");
+                File.WriteAllText(Timetable.monday_path, $"{Timetable.Mon_p1}:{Timetable.Mon_p2}:{Timetable.Mon_p3}:{Timetable.Mon_p4}:{Timetable.Mon_lunch}:{change}:{Timetable.Mon_p6}:{Timetable.Mon_home}");
                 break;
                 case "mon_p6":
-                File.WriteAllText(Timetable.monday_path, $"{timetable.Mon_p1}:{timetable.Mon_p2}:{timetable.Mon_p3}:{timetable.Mon_p4}:{timetable.Mon_lunch}:{timetable.Mon_p5}:{change}:{timetable.Mon_home}");
+                File.WriteAllText(Timetable.monday_path, $"{Timetable.Mon_p1}:{Timetable.Mon_p2}:{Timetable.Mon_p3}:{Timetable.Mon_p4}:{Timetable.Mon_lunch}:{Timetable.Mon_p5}:{change}:{Timetable.Mon_home}");
                 break;
                 case "mon_phome":
-                File.WriteAllText(Timetable.monday_path, $"{timetable.Mon_p1}:{timetable.Mon_p2}:{timetable.Mon_p3}:{timetable.Mon_p4}:{timetable.Mon_lunch}:{timetable.Mon_p5}:{timetable.Mon_p6}:{change}");
+                File.WriteAllText(Timetable.monday_path, $"{Timetable.Mon_p1}:{Timetable.Mon_p2}:{Timetable.Mon_p3}:{Timetable.Mon_p4}:{Timetable.Mon_lunch}:{Timetable.Mon_p5}:{Timetable.Mon_p6}:{change}");
                 break;
 
                 case "tue_p1":
-                File.WriteAllText(Timetable.tuesday_path, $"{change}:{timetable.Tue_p2}:{timetable.Tue_p3}:{timetable.Tue_p4}:{timetable.Tue_lunch}:{timetable.Tue_p5}:{timetable.Tue_p6}:{timetable.Tue_home}");
+                File.WriteAllText(Timetable.tuesday_path, $"{change}:{Timetable.Tue_p2}:{Timetable.Tue_p3}:{Timetable.Tue_p4}:{Timetable.Tue_lunch}:{Timetable.Tue_p5}:{Timetable.Tue_p6}:{Timetable.Tue_home}");
                 break;
                 case "tue_p2":
-                File.WriteAllText(Timetable.tuesday_path, $"{timetable.Tue_p1}:{change}:{timetable.Tue_p3}:{timetable.Tue_p4}:{timetable.Tue_lunch}:{timetable.Tue_p5}:{timetable.Tue_p6}:{timetable.Tue_home}");
+                File.WriteAllText(Timetable.tuesday_path, $"{Timetable.Tue_p1}:{change}:{Timetable.Tue_p3}:{Timetable.Tue_p4}:{Timetable.Tue_lunch}:{Timetable.Tue_p5}:{Timetable.Tue_p6}:{Timetable.Tue_home}");
                 break;
                 case "tue_p3":
-                File.WriteAllText(Timetable.tuesday_path, $"{timetable.Tue_p1}:{timetable.Tue_p2}:{change}:{timetable.Tue_p4}:{timetable.Tue_lunch}:{timetable.Tue_p5}:{timetable.Tue_p6}:{timetable.Tue_home}");
+                File.WriteAllText(Timetable.tuesday_path, $"{Timetable.Tue_p1}:{Timetable.Tue_p2}:{change}:{Timetable.Tue_p4}:{Timetable.Tue_lunch}:{Timetable.Tue_p5}:{Timetable.Tue_p6}:{Timetable.Tue_home}");
                 break;
                 case "tue_p4":
-                File.WriteAllText(Timetable.tuesday_path, $"{timetable.Tue_p1}:{timetable.Tue_p2}:{timetable.Tue_p3}:{change}:{timetable.Tue_lunch}:{timetable.Tue_p5}:{timetable.Tue_p6}:{timetable.Tue_home}");
+                File.WriteAllText(Timetable.tuesday_path, $"{Timetable.Tue_p1}:{Timetable.Tue_p2}:{Timetable.Tue_p3}:{change}:{Timetable.Tue_lunch}:{Timetable.Tue_p5}:{Timetable.Tue_p6}:{Timetable.Tue_home}");
                 break;
                 case "tue_plunch":
-                File.WriteAllText(Timetable.tuesday_path, $"{timetable.Tue_p1}:{timetable.Tue_p2}:{timetable.Tue_p3}:{timetable.Tue_p4}:{change}:{timetable.Tue_p5}:{timetable.Tue_p6}:{timetable.Tue_home}");
+                File.WriteAllText(Timetable.tuesday_path, $"{Timetable.Tue_p1}:{Timetable.Tue_p2}:{Timetable.Tue_p3}:{Timetable.Tue_p4}:{change}:{Timetable.Tue_p5}:{Timetable.Tue_p6}:{Timetable.Tue_home}");
                 break;
                 case "tue_p5":
-                File.WriteAllText(Timetable.tuesday_path, $"{timetable.Tue_p1}:{timetable.Tue_p2}:{timetable.Tue_p3}:{timetable.Tue_p4}:{timetable.Tue_lunch}:{change}:{timetable.Tue_p6}:{timetable.Tue_home}");
+                File.WriteAllText(Timetable.tuesday_path, $"{Timetable.Tue_p1}:{Timetable.Tue_p2}:{Timetable.Tue_p3}:{Timetable.Tue_p4}:{Timetable.Tue_lunch}:{change}:{Timetable.Tue_p6}:{Timetable.Tue_home}");
                 break;
                 case "tue_p6":
-                File.WriteAllText(Timetable.tuesday_path, $"{timetable.Tue_p1}:{timetable.Tue_p2}:{timetable.Tue_p3}:{timetable.Tue_p4}:{timetable.Tue_lunch}:{timetable.Tue_p5}:{change}:{timetable.Tue_home}");
+                File.WriteAllText(Timetable.tuesday_path, $"{Timetable.Tue_p1}:{Timetable.Tue_p2}:{Timetable.Tue_p3}:{Timetable.Tue_p4}:{Timetable.Tue_lunch}:{Timetable.Tue_p5}:{change}:{Timetable.Tue_home}");
                 break;
                 case "tue_phome":
-                File.WriteAllText(Timetable.tuesday_path, $"{timetable.Tue_p1}:{timetable.Tue_p2}:{timetable.Tue_p3}:{timetable.Tue_p4}:{timetable.Tue_lunch}:{timetable.Tue_p5}:{timetable.Tue_p6}:{change}");
+                File.WriteAllText(Timetable.tuesday_path, $"{Timetable.Tue_p1}:{Timetable.Tue_p2}:{Timetable.Tue_p3}:{Timetable.Tue_p4}:{Timetable.Tue_lunch}:{Timetable.Tue_p5}:{Timetable.Tue_p6}:{change}");
                 break;
 
                 case "wed_p1":
-                File.WriteAllText(Timetable.wednesday_path, $"{change}:{timetable.Wed_p2}:{timetable.Wed_p3}:{timetable.Wed_p4}:{timetable.Wed_lunch}:{timetable.Wed_p5}:{timetable.Wed_p6}:{timetable.Wed_home}");
+                File.WriteAllText(Timetable.wednesday_path, $"{change}:{Timetable.Wed_p2}:{Timetable.Wed_p3}:{Timetable.Wed_p4}:{Timetable.Wed_lunch}:{Timetable.Wed_p5}:{Timetable.Wed_p6}:{Timetable.Wed_home}");
                 break;
                 case "wed_p2":
-                File.WriteAllText(Timetable.wednesday_path, $"{timetable.Wed_p1}:{change}:{timetable.Wed_p3}:{timetable.Wed_p4}:{timetable.Wed_lunch}:{timetable.Wed_p5}:{timetable.Wed_p6}:{timetable.Wed_home}");
+                File.WriteAllText(Timetable.wednesday_path, $"{Timetable.Wed_p1}:{change}:{Timetable.Wed_p3}:{Timetable.Wed_p4}:{Timetable.Wed_lunch}:{Timetable.Wed_p5}:{Timetable.Wed_p6}:{Timetable.Wed_home}");
                 break;
                 case "wed_p3":
-                File.WriteAllText(Timetable.wednesday_path, $"{timetable.Wed_p1}:{timetable.Wed_p2}:{change}:{timetable.Wed_p4}:{timetable.Wed_lunch}:{timetable.Wed_p5}:{timetable.Wed_p6}:{timetable.Wed_home}");
+                File.WriteAllText(Timetable.wednesday_path, $"{Timetable.Wed_p1}:{Timetable.Wed_p2}:{change}:{Timetable.Wed_p4}:{Timetable.Wed_lunch}:{Timetable.Wed_p5}:{Timetable.Wed_p6}:{Timetable.Wed_home}");
                 break;
                 case "wed_p4":
-                File.WriteAllText(Timetable.wednesday_path, $"{timetable.Wed_p1}:{timetable.Wed_p2}:{timetable.Wed_p3}:{change}:{timetable.Wed_lunch}:{timetable.Wed_p5}:{timetable.Wed_p6}:{timetable.Wed_home}");
+                File.WriteAllText(Timetable.wednesday_path, $"{Timetable.Wed_p1}:{Timetable.Wed_p2}:{Timetable.Wed_p3}:{change}:{Timetable.Wed_lunch}:{Timetable.Wed_p5}:{Timetable.Wed_p6}:{Timetable.Wed_home}");
                 break;
                 case "wed_plunch":
-                File.WriteAllText(Timetable.wednesday_path, $"{timetable.Wed_p1}:{timetable.Wed_p2}:{timetable.Wed_p3}:{timetable.Wed_p4}:{change}:{timetable.Wed_p5}:{timetable.Wed_p6}:{timetable.Wed_home}");
+                File.WriteAllText(Timetable.wednesday_path, $"{Timetable.Wed_p1}:{Timetable.Wed_p2}:{Timetable.Wed_p3}:{Timetable.Wed_p4}:{change}:{Timetable.Wed_p5}:{Timetable.Wed_p6}:{Timetable.Wed_home}");
                 break;
                 case "wed_p5":
-                File.WriteAllText(Timetable.wednesday_path, $"{timetable.Wed_p1}:{timetable.Wed_p2}:{timetable.Wed_p3}:{timetable.Wed_p4}:{timetable.Wed_lunch}:{change}:{timetable.Wed_p6}:{timetable.Wed_home}");
+                File.WriteAllText(Timetable.wednesday_path, $"{Timetable.Wed_p1}:{Timetable.Wed_p2}:{Timetable.Wed_p3}:{Timetable.Wed_p4}:{Timetable.Wed_lunch}:{change}:{Timetable.Wed_p6}:{Timetable.Wed_home}");
                 break;
                 case "wed_p6":
-                File.WriteAllText(Timetable.wednesday_path, $"{timetable.Wed_p1}:{timetable.Wed_p2}:{timetable.Wed_p3}:{timetable.Wed_p4}:{timetable.Wed_lunch}:{timetable.Wed_p5}:{change}:{timetable.Wed_home}");
+                File.WriteAllText(Timetable.wednesday_path, $"{Timetable.Wed_p1}:{Timetable.Wed_p2}:{Timetable.Wed_p3}:{Timetable.Wed_p4}:{Timetable.Wed_lunch}:{Timetable.Wed_p5}:{change}:{Timetable.Wed_home}");
                 break;
                 case "wed_phome":
-                File.WriteAllText(Timetable.wednesday_path, $"{timetable.Wed_p1}:{timetable.Wed_p2}:{timetable.Wed_p3}:{timetable.Wed_p4}:{timetable.Wed_lunch}:{timetable.Wed_p5}:{timetable.Wed_p6}:{change}");
+                File.WriteAllText(Timetable.wednesday_path, $"{Timetable.Wed_p1}:{Timetable.Wed_p2}:{Timetable.Wed_p3}:{Timetable.Wed_p4}:{Timetable.Wed_lunch}:{Timetable.Wed_p5}:{Timetable.Wed_p6}:{change}");
                 break;
 
                 case "thu_p1":
-                File.WriteAllText(Timetable.thursday_path, $"{change}:{timetable.Thu_p2}:{timetable.Thu_p3}:{timetable.Thu_p4}:{timetable.Thu_lunch}:{timetable.Thu_p5}:{timetable.Thu_p6}:{timetable.Thu_home}");
+                File.WriteAllText(Timetable.thursday_path, $"{change}:{Timetable.Thu_p2}:{Timetable.Thu_p3}:{Timetable.Thu_p4}:{Timetable.Thu_lunch}:{Timetable.Thu_p5}:{Timetable.Thu_p6}:{Timetable.Thu_home}");
                 break;
                 case "thu_p2":
-                File.WriteAllText(Timetable.thursday_path, $"{timetable.Thu_p1}:{change}:{timetable.Thu_p3}:{timetable.Thu_p4}:{timetable.Thu_lunch}:{timetable.Thu_p5}:{timetable.Thu_p6}:{timetable.Thu_home}");
+                File.WriteAllText(Timetable.thursday_path, $"{Timetable.Thu_p1}:{change}:{Timetable.Thu_p3}:{Timetable.Thu_p4}:{Timetable.Thu_lunch}:{Timetable.Thu_p5}:{Timetable.Thu_p6}:{Timetable.Thu_home}");
                 break;
                 case "thu_p3":
-                File.WriteAllText(Timetable.thursday_path, $"{timetable.Thu_p1}:{timetable.Thu_p2}:{change}:{timetable.Thu_p4}:{timetable.Thu_lunch}:{timetable.Thu_p5}:{timetable.Thu_p6}:{timetable.Thu_home}");
+                File.WriteAllText(Timetable.thursday_path, $"{Timetable.Thu_p1}:{Timetable.Thu_p2}:{change}:{Timetable.Thu_p4}:{Timetable.Thu_lunch}:{Timetable.Thu_p5}:{Timetable.Thu_p6}:{Timetable.Thu_home}");
                 break;
                 case "thu_p4":
-                File.WriteAllText(Timetable.thursday_path, $"{timetable.Thu_p1}:{timetable.Thu_p2}:{timetable.Thu_p3}:{change}:{timetable.Thu_lunch}:{timetable.Thu_p5}:{timetable.Thu_p6}:{timetable.Thu_home}");
+                File.WriteAllText(Timetable.thursday_path, $"{Timetable.Thu_p1}:{Timetable.Thu_p2}:{Timetable.Thu_p3}:{change}:{Timetable.Thu_lunch}:{Timetable.Thu_p5}:{Timetable.Thu_p6}:{Timetable.Thu_home}");
                 break;
                 case "thu_plunch":
-                File.WriteAllText(Timetable.thursday_path, $"{timetable.Thu_p1}:{timetable.Thu_p2}:{timetable.Thu_p3}:{timetable.Thu_p4}:{change}:{timetable.Thu_p5}:{timetable.Thu_p6}:{timetable.Thu_home}");
+                File.WriteAllText(Timetable.thursday_path, $"{Timetable.Thu_p1}:{Timetable.Thu_p2}:{Timetable.Thu_p3}:{Timetable.Thu_p4}:{change}:{Timetable.Thu_p5}:{Timetable.Thu_p6}:{Timetable.Thu_home}");
                 break;
                 case "thu_p5":
-                File.WriteAllText(Timetable.thursday_path, $"{timetable.Thu_p1}:{timetable.Thu_p2}:{timetable.Thu_p3}:{timetable.Thu_p4}:{timetable.Thu_lunch}:{change}:{timetable.Thu_p6}:{timetable.Thu_home}");
+                File.WriteAllText(Timetable.thursday_path, $"{Timetable.Thu_p1}:{Timetable.Thu_p2}:{Timetable.Thu_p3}:{Timetable.Thu_p4}:{Timetable.Thu_lunch}:{change}:{Timetable.Thu_p6}:{Timetable.Thu_home}");
                 break;
                 case "thu_p6":
-                File.WriteAllText(Timetable.thursday_path, $"{timetable.Thu_p1}:{timetable.Thu_p2}:{timetable.Thu_p3}:{timetable.Thu_p4}:{timetable.Thu_lunch}:{timetable.Thu_p5}:{change}:{timetable.Thu_home}");
+                File.WriteAllText(Timetable.thursday_path, $"{Timetable.Thu_p1}:{Timetable.Thu_p2}:{Timetable.Thu_p3}:{Timetable.Thu_p4}:{Timetable.Thu_lunch}:{Timetable.Thu_p5}:{change}:{Timetable.Thu_home}");
                 break;
                 case "thu_phome":
-                File.WriteAllText(Timetable.thursday_path, $"{timetable.Thu_p1}:{timetable.Thu_p2}:{timetable.Thu_p3}:{timetable.Thu_p4}:{timetable.Thu_lunch}:{timetable.Thu_p5}:{timetable.Thu_p6}:{change}");
+                File.WriteAllText(Timetable.thursday_path, $"{Timetable.Thu_p1}:{Timetable.Thu_p2}:{Timetable.Thu_p3}:{Timetable.Thu_p4}:{Timetable.Thu_lunch}:{Timetable.Thu_p5}:{Timetable.Thu_p6}:{change}");
                 break;
 
                 case "fri_p1":
-                File.WriteAllText(Timetable.friday_path, $"{change}:{timetable.Fri_p2}:{timetable.Fri_p3}:{timetable.Fri_p4}:{timetable.Fri_lunch}:{timetable.Fri_p5}:{timetable.Fri_p6}:{timetable.Fri_home}");
+                File.WriteAllText(Timetable.friday_path, $"{change}:{Timetable.Fri_p2}:{Timetable.Fri_p3}:{Timetable.Fri_p4}:{Timetable.Fri_lunch}:{Timetable.Fri_p5}:{Timetable.Fri_p6}:{Timetable.Fri_home}");
                 break;
                 case "fri_p2":
-                File.WriteAllText(Timetable.friday_path, $"{timetable.Fri_p1}:{change}:{timetable.Fri_p3}:{timetable.Fri_p4}:{timetable.Fri_lunch}:{timetable.Fri_p5}:{timetable.Fri_p6}:{timetable.Fri_home}");
+                File.WriteAllText(Timetable.friday_path, $"{Timetable.Fri_p1}:{change}:{Timetable.Fri_p3}:{Timetable.Fri_p4}:{Timetable.Fri_lunch}:{Timetable.Fri_p5}:{Timetable.Fri_p6}:{Timetable.Fri_home}");
                 break;
                 case "fri_p3":
-                File.WriteAllText(Timetable.friday_path, $"{timetable.Fri_p1}:{timetable.Fri_p2}:{change}:{timetable.Fri_p4}:{timetable.Fri_lunch}:{timetable.Fri_p5}:{timetable.Fri_p6}:{timetable.Fri_home}");
+                File.WriteAllText(Timetable.friday_path, $"{Timetable.Fri_p1}:{Timetable.Fri_p2}:{change}:{Timetable.Fri_p4}:{Timetable.Fri_lunch}:{Timetable.Fri_p5}:{Timetable.Fri_p6}:{Timetable.Fri_home}");
                 break;
                 case "fri_p4":
-                File.WriteAllText(Timetable.friday_path, $"{timetable.Fri_p1}:{timetable.Fri_p2}:{timetable.Fri_p3}:{change}:{timetable.Fri_lunch}:{timetable.Fri_p5}:{timetable.Fri_p6}:{timetable.Fri_home}");
+                File.WriteAllText(Timetable.friday_path, $"{Timetable.Fri_p1}:{Timetable.Fri_p2}:{Timetable.Fri_p3}:{change}:{Timetable.Fri_lunch}:{Timetable.Fri_p5}:{Timetable.Fri_p6}:{Timetable.Fri_home}");
                 break;
                 case "fri_plunch":
-                File.WriteAllText(Timetable.friday_path, $"{timetable.Fri_p1}:{timetable.Fri_p2}:{timetable.Fri_p3}:{timetable.Fri_p4}:{change}:{timetable.Fri_p5}:{timetable.Fri_p6}:{timetable.Fri_home}");
+                File.WriteAllText(Timetable.friday_path, $"{Timetable.Fri_p1}:{Timetable.Fri_p2}:{Timetable.Fri_p3}:{Timetable.Fri_p4}:{change}:{Timetable.Fri_p5}:{Timetable.Fri_p6}:{Timetable.Fri_home}");
                 break;
                 case "fri_p5":
-                File.WriteAllText(Timetable.friday_path, $"{timetable.Fri_p1}:{timetable.Fri_p2}:{timetable.Fri_p3}:{timetable.Fri_p4}:{timetable.Fri_lunch}:{change}:{timetable.Fri_p6}:{timetable.Fri_home}");
+                File.WriteAllText(Timetable.friday_path, $"{Timetable.Fri_p1}:{Timetable.Fri_p2}:{Timetable.Fri_p3}:{Timetable.Fri_p4}:{Timetable.Fri_lunch}:{change}:{Timetable.Fri_p6}:{Timetable.Fri_home}");
                 break;
                 case "fri_p6":
-                File.WriteAllText(Timetable.friday_path, $"{timetable.Fri_p1}:{timetable.Fri_p2}:{timetable.Fri_p3}:{timetable.Fri_p4}:{timetable.Fri_lunch}:{timetable.Fri_p5}:{change}:{timetable.Fri_home}");
+                File.WriteAllText(Timetable.friday_path, $"{Timetable.Fri_p1}:{Timetable.Fri_p2}:{Timetable.Fri_p3}:{Timetable.Fri_p4}:{Timetable.Fri_lunch}:{Timetable.Fri_p5}:{change}:{Timetable.Fri_home}");
                 break;
                 case "fri_phome":
-                File.WriteAllText(Timetable.friday_path, $"{timetable.Fri_p1}:{timetable.Fri_p2}:{timetable.Fri_p3}:{timetable.Fri_p4}:{timetable.Fri_lunch}:{timetable.Fri_p5}:{timetable.Fri_p6}:{change}");
+                File.WriteAllText(Timetable.friday_path, $"{Timetable.Fri_p1}:{Timetable.Fri_p2}:{Timetable.Fri_p3}:{Timetable.Fri_p4}:{Timetable.Fri_lunch}:{Timetable.Fri_p5}:{Timetable.Fri_p6}:{change}");
                 break;
             }
-            timetable = new Timetable(File.ReadAllText(Timetable.form_path), File.ReadAllText(Timetable.monday_path).Split(":"), File.ReadAllText(Timetable.tuesday_path).Split(":"), File.ReadAllText(Timetable.wednesday_path).Split(":"), File.ReadAllText(Timetable.thursday_path).Split(":"), File.ReadAllText(Timetable.friday_path).Split(":"));
-            return timetable;
+            Timetable.timetable(File.ReadAllText(Timetable.form_path), File.ReadAllText(Timetable.monday_path).Split(":"), File.ReadAllText(Timetable.tuesday_path).Split(":"), File.ReadAllText(Timetable.wednesday_path).Split(":"), File.ReadAllText(Timetable.thursday_path).Split(":"), File.ReadAllText(Timetable.friday_path).Split(":"));
         }
-        public static Timetable Change_form(Timetable timetable)
+
+        public static void Change_form()
         {
-            G.write("What room is your new form?");
-            string new_room = Console.ReadLine();
+            write("What room is your new form?");
+            string new_room = read(null);
             File.WriteAllText(Timetable.form_path, $" Form {new_room}");
-            timetable.Form = new_room;
-            return timetable;
+            Timetable.Form = new_room;
+        }
+
+        public static Color BackgroundColour { get; set; }
+        public static Color ForegroundColour { get; set; }
+        public static bool is_killed { get; set; }
+
+        private static volatile string text;
+        public static string Text { get { return text; } set { text = value; } }
+
+        public static void write(string what_to_write, bool new_line = true)
+        {
+            if(new_line)
+            {
+                Text = Text + what_to_write + "\n";
+            } else {
+                Text = Text + what_to_write;
+            }
+        }
+
+        public static string read(char? replace)
+        {
+            string return_s = "";
+            string key = "";
+            int key_pre = 0;
+            do {
+                key_pre = Raylib.GetCharPressed();
+                key = Convert.ToChar(key_pre).ToString();
+                if(key_pre == 127/*backspace*/)
+                {
+                    return_s = return_s.Substring(0, return_s.Length - 1);
+                    Text = Text.Substring(0, Text.Length - 1);
+                    continue;
+                }
+                if(key_pre != 0 && key_pre != 13)
+                {
+                    if(replace == null)
+                    {
+                        Text += key;
+                    } else {
+                        Text += replace;
+                    }
+                }
+            } while(key_pre != 13/*enter*/);
+            return return_s += "\n";
+        }
+        
+        public static KeyboardKey read_key()
+        {
+            KeyboardKey key;
+            do {
+                key = (KeyboardKey)Raylib.GetKeyPressed();
+            } while(key == 0);
+            Text += key.ToString();
+            return key;
+        }
+
+        public static void clear()
+        {
+            Text = "";
+        }
+
+        public static void Inverse()
+        {
+            if (BackgroundColour == Color.White)
+            {
+                BackgroundColour = Color.Black;
+            } else
+            {
+                BackgroundColour = Color.White;
+            }
+            if (ForegroundColour == Color.White)
+            {
+                ForegroundColour = Color.Black;
+            } else
+            {
+                ForegroundColour = Color.White;
+            }
+        }
+
+        public static void back(int how_much_back)
+        {
+            string[] line_count = Text.Split('\n');
+            int length_back = line_count.Length - how_much_back;
+            if(length_back < 0) { Text = ""; ArgumentOutOfRangeException.ThrowIfZero(length_back); return; }
+            Text = "";
+            for(int i = 0; i < length_back; i++)
+            {
+                Text += (line_count[i] + "\n");
+            }
+        }
+
+        [System.STAThread]
+        static void Main(string[] args)
+        {
+            ThreadStart threadStart = new ThreadStart(Window.Program);
+            Thread thread = new Thread(threadStart);
+            thread.Start();
+            Text = "";
+            if(Settings.Dark_mode)
+            {
+                BackgroundColour = Color.Black;
+                ForegroundColour = Color.White;
+            } else {
+                BackgroundColour = Color.White;
+                ForegroundColour = Color.Black;
+            }
+            is_killed = false;
+
+            Image logo = Raylib.LoadImage("logo.ico");
+            //Font font = Raylib.LoadFont("CONSOLA.TTF");
+            Raylib.InitWindow(800, 500, "Arbot");
+            Raylib.SetWindowIcon(logo);
+            Raylib.SetTargetFPS(60);
+            
+            while(!Raylib.WindowShouldClose() || !is_killed)
+            { 
+                Raylib.ClearBackground(Window.BackgroundColour);
+                Raylib.BeginDrawing();
+                    //Raylib.DrawTextEx(font, Text, new Vector2(5, 5), 24, 1, Window.ForegroundColour);
+                    Raylib.DrawText(Text, 5, 5, 24, Window.ForegroundColour);
+                Raylib.EndDrawing();
+            }
+
+            //try { thread.Abort(); } catch(Exception) { } finally { }
+            thread.Join(); 
+            //Raylib.UnloadFont(font);
+            Raylib.UnloadImage(logo);
+            Raylib.CloseWindow();
+        }
+
+        public static void kill_terminal()
+        {
+            is_killed = true;
         }
     }
 
     public class Info
     {
-        public string? Name { get; set; }
-        public string? Password { get; set; }
-        public int? Positives { get; set; }
-        public int? Negatives { get; set; }
-        public string? Password_reset_token { get; set; }
+        public static string? Name { get; set; }
+        public static string? Password { get; set; }
+        public static int? Positives { get; set; }
+        public static int? Negatives { get; set; }
+        public static string? Password_reset_token { get; set; }
 
         public static string password_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Password.txt");
         public static string name_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Name.txt");
@@ -799,7 +957,7 @@ namespace Arbot__V_Console___V_FileData_
         public static string negatives_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Negatives.txt");
         public static string password_reset_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Password_reset.txt");
 
-        public Info(string name, string password, int positives, int negatives, string password_reset_token)
+        public static void info(string name, string password, int positives, int negatives, string password_reset_token)
         {
             Name = name;
             Password = password;
@@ -811,51 +969,51 @@ namespace Arbot__V_Console___V_FileData_
 
     public class Timetable
     {
-        public string? Form { get; set; }
-        public string? Mon_p1 { get; set; }
-        public string? Mon_p2 { get; set; }
-        public string? Mon_p3 { get; set; }
-        public string? Mon_p4 { get; set; }
-        public string? Mon_lunch { get; set; }
-        public string? Mon_p5 { get; set; }
-        public string? Mon_p6 { get; set; }
-        public string? Mon_home { get; set; }
+        public static string? Form { get; set; }
+        public static string? Mon_p1 { get; set; }
+        public static string? Mon_p2 { get; set; }
+        public static string? Mon_p3 { get; set; }
+        public static string? Mon_p4 { get; set; }
+        public static string? Mon_lunch { get; set; }
+        public static string? Mon_p5 { get; set; }
+        public static string? Mon_p6 { get; set; }
+        public static string? Mon_home { get; set; }
 
-        public string? Tue_p1 { get; set; }
-        public string? Tue_p2 { get; set; }
-        public string? Tue_p3 { get; set; }
-        public string? Tue_p4 { get; set; }
-        public string? Tue_lunch { get; set; }
-        public string? Tue_p5 { get; set; }
-        public string? Tue_p6 { get; set; }
-        public string? Tue_home { get; set; }
+        public static string? Tue_p1 { get; set; }
+        public static string? Tue_p2 { get; set; }
+        public static string? Tue_p3 { get; set; }
+        public static string? Tue_p4 { get; set; }
+        public static string? Tue_lunch { get; set; }
+        public static string? Tue_p5 { get; set; }
+        public static string? Tue_p6 { get; set; }
+        public static string? Tue_home { get; set; }
 
-        public string? Wed_p1 { get; set; }
-        public string? Wed_p2 { get; set; }
-        public string? Wed_p3 { get; set; }
-        public string? Wed_p4 { get; set; }
-        public string? Wed_lunch { get; set; }
-        public string? Wed_p5 { get; set; }
-        public string? Wed_p6 { get; set; }
-        public string? Wed_home { get; set; }
+        public static string? Wed_p1 { get; set; }
+        public static string? Wed_p2 { get; set; }
+        public static string? Wed_p3 { get; set; }
+        public static string? Wed_p4 { get; set; }
+        public static string? Wed_lunch { get; set; }
+        public static string? Wed_p5 { get; set; }
+        public static string? Wed_p6 { get; set; }
+        public static string? Wed_home { get; set; }
 
-        public string? Thu_p1 { get; set; }
-        public string? Thu_p2 { get; set; }
-        public string? Thu_p3 { get; set; }
-        public string? Thu_p4 { get; set; }
-        public string? Thu_lunch { get; set; }
-        public string? Thu_p5 { get; set; }
-        public string? Thu_p6 { get; set; }
-        public string? Thu_home { get; set; }
+        public static string? Thu_p1 { get; set; }
+        public static string? Thu_p2 { get; set; }
+        public static string? Thu_p3 { get; set; }
+        public static string? Thu_p4 { get; set; }
+        public static string? Thu_lunch { get; set; }
+        public static string? Thu_p5 { get; set; }
+        public static string? Thu_p6 { get; set; }
+        public static string? Thu_home { get; set; }
 
-        public string? Fri_p1 { get; set; }
-        public string? Fri_p2 { get; set; }
-        public string? Fri_p3 { get; set; }
-        public string? Fri_p4 { get; set; }
-        public string? Fri_lunch { get; set; }
-        public string? Fri_p5 { get; set; }
-        public string? Fri_p6 { get; set; }
-        public string? Fri_home { get; set; }
+        public static string? Fri_p1 { get; set; }
+        public static string? Fri_p2 { get; set; }
+        public static string? Fri_p3 { get; set; }
+        public static string? Fri_p4 { get; set; }
+        public static string? Fri_lunch { get; set; }
+        public static string? Fri_p5 { get; set; }
+        public static string? Fri_p6 { get; set; }
+        public static string? Fri_home { get; set; }
 
         public static string form_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Lessons", "Form.txt");
         public static string monday_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Lessons", "Monday.txt");
@@ -864,7 +1022,7 @@ namespace Arbot__V_Console___V_FileData_
         public static string thursday_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Lessons", "Thursday.txt");
         public static string friday_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Lessons", "Friday.txt");
 
-        public Timetable(string form, string[] mon, string[] tue, string[] wed, string[] thu, string[] fri)
+        public static void timetable(string form, string[] mon, string[] tue, string[] wed, string[] thu, string[] fri)
         {
             Form = form;
             Mon_p1 = mon[0];
@@ -915,15 +1073,19 @@ namespace Arbot__V_Console___V_FileData_
     }
     public class Settings
     {
-        public bool Fast_load { get; set; }
-        public bool Name_or_master { get; set; }
+        public static bool Fast_load { get; set; }
+        public static bool Name_or_master { get; set; }
+        
+        private static volatile bool dark_mode;
+        public static bool Dark_mode { get { return dark_mode; } set { dark_mode = value; } }
 
         public static string Settings_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Settings.txt");
 
-        public Settings(string[] set)
+        public static void settings(string[] set)
         {
             Fast_load = bool.Parse(set[0]);
             Name_or_master = bool.Parse(set[1]);
+            Dark_mode = bool.Parse(set[2]);
         }
     }
 }

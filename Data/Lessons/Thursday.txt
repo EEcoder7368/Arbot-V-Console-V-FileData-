@@ -1,1 +1,1 @@
-lesson room:lesson room:lesson room:lesson room:lunch time:lesson room:lesson room:home time
+{lesson} {room}:{lesson} {room}:{lesson} {room}:{lesson} {room}:lunch time:{lesson} {room}:{lesson} {room}:home time
