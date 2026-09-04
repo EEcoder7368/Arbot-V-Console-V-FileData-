@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Raylib_cs;
 using Easy_mode;
+using System.Runtime.CompilerServices;
 
 namespace Arbot__V_Console___V_FileData_
 {
@@ -816,6 +817,9 @@ namespace Arbot__V_Console___V_FileData_
         private static volatile string text;
         public static string Text { get { return text; } set { text = value; } }
 
+        private static List<KeyboardKey> char_queue { get; set; }
+        private static bool ignore_input = true;
+
         public static void write(string what_to_write, bool new_line = true)
         {
             if(new_line)
@@ -824,6 +828,13 @@ namespace Arbot__V_Console___V_FileData_
             } else {
                 Text = Text + what_to_write;
             }
+        }
+
+        public int GetCharPressed()
+        {
+            int key;
+            
+            return 0;
         }
 
         public static string read(char? replace)
