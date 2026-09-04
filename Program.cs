@@ -815,9 +815,6 @@ namespace Arbot__V_Console___V_FileData_
         private static volatile string text;
         public static string Text { get { return text; } set { text = value; } }
 
-        private static List<KeyboardKey> char_queue { get; set; }
-        private static bool ignore_input = true;
-
         public static void write(string what_to_write, bool new_line = true)
         {
             if(new_line)
@@ -828,28 +825,35 @@ namespace Arbot__V_Console___V_FileData_
             }
         }
 
-        public int GetCharPressed()
+        public static KeyboardKey GetKeyPressed()
         {
-            int key;
-            
-            return 0;
+            KeyboardKey key;
+            for(int i = 1; i <= 125; i++)
+            {
+                if(Raylib.IsKeyPressed((KeyboardKey)i))
+                {
+                    key = (KeyboardKey)i;
+                    return key;
+                }
+            }
+            return KeyboardKey.Null;
         }
 
         public static string read(char? replace)
         {
             string return_s = "";
             string key = "";
-            int key_pre = 0;
+            KeyboardKey key_pre = KeyboardKey.Null;
             do {
-                key_pre = Raylib.GetCharPressed();
-                key = Convert.ToChar(key_pre).ToString();
-                if(key_pre == 127/*backspace*/)
+                key_pre = Window.GetKeyPressed();
+                key = key_pre.ToString();
+                if(key_pre == KeyboardKey.Backspace)
                 {
                     return_s = return_s.Substring(0, return_s.Length - 1);
                     Text = Text.Substring(0, Text.Length - 1);
                     continue;
                 }
-                if(key_pre != 0 && key_pre != 13)
+                if(key_pre != KeyboardKey.Null && key_pre != KeyboardKey.Enter)
                 {
                     if(replace == null)
                     {
@@ -858,7 +862,7 @@ namespace Arbot__V_Console___V_FileData_
                         Text += replace;
                     }
                 }
-            } while(key_pre != 13/*enter*/);
+            } while(key_pre != KeyboardKey.Enter);
             return return_s += "\n";
         }
         
