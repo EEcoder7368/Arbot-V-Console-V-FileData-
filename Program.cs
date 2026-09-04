@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Raylib_cs;
-using Easy_mode;
-using System.Runtime.CompilerServices;
 
 namespace Arbot__V_Console___V_FileData_
 {
@@ -155,32 +153,32 @@ namespace Arbot__V_Console___V_FileData_
                 switch (today_weekday)
                 {
                     case DayOfWeek.Monday:
-                        lessons = new List<string> { Timetable.Form, Timetable.Mon_p1, Timetable.Mon_p2, "Breaktime", Timetable.Mon_p3, Timetable.Mon_p4, Timetable.Mon_lunch, Timetable.Mon_p5, Timetable.Mon_p6, Timetable.Mon_home };
-                        break;
+                    lessons = new List<string> { Timetable.Form, Timetable.Mon_p1, Timetable.Mon_p2, "Breaktime", Timetable.Mon_p3, Timetable.Mon_p4, Timetable.Mon_lunch, Timetable.Mon_p5, Timetable.Mon_p6, Timetable.Mon_home };
+                    break;
 
                     case DayOfWeek.Tuesday:
-                        lessons = new List<string> { Timetable.Form, Timetable.Tue_p1, Timetable.Tue_p2, "Breaktime", Timetable.Tue_p3, Timetable.Tue_p4, Timetable.Tue_lunch, Timetable.Tue_p5, Timetable.Tue_p6, Timetable.Tue_home };
-                        break;
+                    lessons = new List<string> { Timetable.Form, Timetable.Tue_p1, Timetable.Tue_p2, "Breaktime", Timetable.Tue_p3, Timetable.Tue_p4, Timetable.Tue_lunch, Timetable.Tue_p5, Timetable.Tue_p6, Timetable.Tue_home };
+                    break;
 
                     case DayOfWeek.Wednesday:
-                        lessons = new List<string> { Timetable.Form, Timetable.Wed_p1, Timetable.Wed_p2, "Breaktime", Timetable.Wed_p3, Timetable.Wed_p4, Timetable.Wed_lunch, Timetable.Wed_p5, Timetable.Wed_p6, Timetable.Wed_home };
-                        break;
+                    lessons = new List<string> { Timetable.Form, Timetable.Wed_p1, Timetable.Wed_p2, "Breaktime", Timetable.Wed_p3, Timetable.Wed_p4, Timetable.Wed_lunch, Timetable.Wed_p5, Timetable.Wed_p6, Timetable.Wed_home };
+                    break;
 
                     case DayOfWeek.Thursday:
-                        lessons = new List<string> { Timetable.Form, Timetable.Thu_p1, Timetable.Thu_p2, "Breaktime", Timetable.Thu_p3, Timetable.Thu_p4, Timetable.Thu_lunch, Timetable.Thu_p5, Timetable.Thu_p6, Timetable.Thu_home };
-                        break;
+                    lessons = new List<string> { Timetable.Form, Timetable.Thu_p1, Timetable.Thu_p2, "Breaktime", Timetable.Thu_p3, Timetable.Thu_p4, Timetable.Thu_lunch, Timetable.Thu_p5, Timetable.Thu_p6, Timetable.Thu_home };
+                    break;
 
                     case DayOfWeek.Friday:
-                        lessons = new List<string> { Timetable.Form, Timetable.Fri_p1, Timetable.Fri_p2, "Breaktime", Timetable.Fri_p3, Timetable.Fri_p4, Timetable.Fri_lunch, Timetable.Fri_p5, Timetable.Fri_p6, Timetable.Fri_home };
-                        break;
+                    lessons = new List<string> { Timetable.Form, Timetable.Fri_p1, Timetable.Fri_p2, "Breaktime", Timetable.Fri_p3, Timetable.Fri_p4, Timetable.Fri_lunch, Timetable.Fri_p5, Timetable.Fri_p6, Timetable.Fri_home };
+                    break;
 
                     case DayOfWeek.Saturday:
-                        lessons = new List<string> { " ", " ", " ", " ", " ", " ", " ", " ", " ", " " };
-                        break;
+                    lessons = new List<string> { " ", " ", " ", " ", " ", " ", " ", " ", " ", " " };
+                    break;
 
                     case DayOfWeek.Sunday:
-                        lessons = new List<string> { " ", " ", " ", " ", " ", " ", " ", " ", " ", " " };
-                        break;
+                    lessons = new List<string> { " ", " ", " ", " ", " ", " ", " ", " ", " ", " " };
+                    break;
                 }
             
                 string current_lesson = lessons[lesson_num];
@@ -448,7 +446,7 @@ namespace Arbot__V_Console___V_FileData_
                             case "5":
                             Window.clear();
                             write("Enter your new name");
-                            File.WriteAllText(Info.name_path, G.read());
+                            File.WriteAllText(Info.name_path, read(null));
                             Info.Name = File.ReadAllText(Info.name_path);
                             write("Done");
                             write("Press any key to continue");
