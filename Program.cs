@@ -535,6 +535,8 @@ namespace Arbot__V_Console___V_FileData_
                     goto start;
                 }
             }
+
+            clear();
             write("\nPress any key to exit...");
             read_key();
             kill_terminal();
@@ -841,29 +843,30 @@ namespace Arbot__V_Console___V_FileData_
 
         public static string read(char? replace)
         {
-            string return_s = "";
-            string key = "";
-            KeyboardKey key_pre = KeyboardKey.Null;
+            string output = "";
+            int key = 0;
+
             do {
-                key_pre = Window.GetKeyPressed();
-                key = key_pre.ToString();
-                if(key_pre == KeyboardKey.Backspace)
+                key = Raylib.GetCharPressed();
+                if(key >= 32 && key <= 125)
                 {
-                    return_s = return_s.Substring(0, return_s.Length - 1);
-                    Text = Text.Substring(0, Text.Length - 1);
-                    continue;
-                }
-                if(key_pre != KeyboardKey.Null && key_pre != KeyboardKey.Enter)
-                {
-                    if(replace == null)
+                    if(replace != null)
                     {
-                        Text += key;
-                    } else {
+                        output += replace;
                         Text += replace;
+                    } else {
+                        output += (char)key;
+                        Text += (char)key;
                     }
                 }
-            } while(key_pre != KeyboardKey.Enter);
-            return return_s += "\n";
+                if(Raylib.IsKeyPressed(KeyboardKey.Backspace) && output.Length > 0)
+                {
+                    output = output.Substring(0, output.Length - 1);
+                    Text = Text.Substring(0, Text.Length - 1);
+                }
+            } while(Raylib.IsKeyPressed(KeyboardKey.Enter) == false);
+            
+            return output += "\n";
         }
         
         public static KeyboardKey read_key()
