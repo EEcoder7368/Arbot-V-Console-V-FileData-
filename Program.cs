@@ -865,8 +865,9 @@ namespace Arbot__V_Console___V_FileData_
                     Text = Text.Substring(0, Text.Length - 1);
                 }
             } while(Raylib.IsKeyPressed(KeyboardKey.Enter) == false);
+            Text += "\n";
             
-            return output += "\n";
+            return output;
         }
         
         public static KeyboardKey read_key()
