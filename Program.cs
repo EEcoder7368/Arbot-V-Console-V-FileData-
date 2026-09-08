@@ -539,7 +539,6 @@ namespace Arbot__V_Console___V_FileData_
             clear();
             write("\nPress any key to exit...");
             read_key();
-            kill_terminal();
         }
 
         public static string Generate()
@@ -938,7 +937,7 @@ namespace Arbot__V_Console___V_FileData_
             Raylib.SetWindowIcon(logo);
             Raylib.SetTargetFPS(60);
             
-            while(!Raylib.WindowShouldClose() || !is_killed)
+            while(!Raylib.WindowShouldClose() || !thread.IsAlive)
             { 
                 Raylib.ClearBackground(Window.BackgroundColour);
                 Raylib.BeginDrawing();
@@ -952,11 +951,6 @@ namespace Arbot__V_Console___V_FileData_
             //Raylib.UnloadFont(font);
             Raylib.UnloadImage(logo);
             Raylib.CloseWindow();
-        }
-
-        public static void kill_terminal()
-        {
-            is_killed = true;
         }
     }
 
