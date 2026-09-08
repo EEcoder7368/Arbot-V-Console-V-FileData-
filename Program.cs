@@ -94,37 +94,37 @@ namespace Arbot__V_Console___V_FileData_
                 {
                     period = "Formtime";
                     lesson_num = 0;
-                    next_bell = "09:10:00";
+                    next_bell = monday_logic("09:10:00");
                 }
                 else if (current_time_obj > TimeSpan.Parse("09:10:00") && current_time_obj < TimeSpan.Parse("10:00:00"))
                 {
                     period = "1";
                     lesson_num = 1;
-                    next_bell = "10:00:00";
+                    next_bell = monday_logic("10:00:00");
                 }
                 else if (current_time_obj > TimeSpan.Parse("10:00:00") && current_time_obj < TimeSpan.Parse("10:50:00"))
                 {
                     period = "2";
                     lesson_num = 2;
-                    next_bell = "10:50:00";
+                    next_bell = monday_logic("10:50:00");
                 }
                 else if (current_time_obj > TimeSpan.Parse("10:50:00") && current_time_obj < TimeSpan.Parse("11:10:00"))
                 {
                     period = "Breaktime";
                     lesson_num = 3;
-                    next_bell = "11:10:00";
+                    next_bell = monday_logic("11:10:00");
                 }
                 else if (current_time_obj > TimeSpan.Parse("11:10:00") && current_time_obj < TimeSpan.Parse("12:00:00"))
                 {
                     period = "3";
                     lesson_num = 4;
-                    next_bell = "12:00:00";
+                    next_bell = monday_logic("12:00:00");
                 }
                 else if (current_time_obj > TimeSpan.Parse("12:00:00") && current_time_obj < TimeSpan.Parse("12:50:00"))
                 {
                     period = "4";
                     lesson_num = 5;
-                    next_bell = "12:50:00";
+                    next_bell = monday_logic("12:50:00");
                 }
                 else if (current_time_obj > TimeSpan.Parse("12:50:00") && current_time_obj < TimeSpan.Parse("13:30:00"))
                 {
@@ -537,8 +537,14 @@ namespace Arbot__V_Console___V_FileData_
             }
 
             clear();
-            write("\nPress any key to exit...");
+            write("Press any key to exit...");
             read_key();
+        }
+
+        public static string monday_logic(string next_bell)
+        {
+            if(DateTime.Now.DayOfWeek == DayOfWeek.Monday) { next_bell = (TimeSpan.Parse(next_bell).Add(TimeSpan.Parse("00:10:00"))).ToString(); }
+            return next_bell;
         }
 
         public static string Generate()
@@ -586,6 +592,12 @@ namespace Arbot__V_Console___V_FileData_
                     break;
                     case Letters.Dash:
                     s += "-";
+                    break;
+                    case Letters.Exclamation:
+                    s += "!";
+                    break;
+                    case Letters.Question:
+                    s += "?";
                     break;
 
                     default:
@@ -662,6 +674,8 @@ namespace Arbot__V_Console___V_FileData_
             n9,
             Underscore,
             Dash,
+            Exclamation,
+            Question
         }
 
         public static void Change_timetable(string day, string period)
@@ -811,7 +825,6 @@ namespace Arbot__V_Console___V_FileData_
 
         public static Color BackgroundColour { get; set; }
         public static Color ForegroundColour { get; set; }
-        public static bool is_killed { get; set; }
 
         private static volatile string text;
         public static string Text { get { return text; } set { text = value; } }
@@ -923,13 +936,12 @@ namespace Arbot__V_Console___V_FileData_
             Text = "";
             if(Settings.Dark_mode)
             {
-                BackgroundColour = Color.Black;
-                ForegroundColour = Color.White;
-            } else {
                 BackgroundColour = Color.White;
                 ForegroundColour = Color.Black;
+            } else {
+                BackgroundColour = Color.Black;
+                ForegroundColour = Color.White;
             }
-            is_killed = false;
 
             Image logo = Raylib.LoadImage("logo.ico");
             //Font font = Raylib.LoadFont("CONSOLA.TTF");

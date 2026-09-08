@@ -2,6 +2,4 @@
 
 Make the ✖️ button work
 
-Fix read()
-
 # Squash bugs #
