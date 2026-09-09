@@ -1,21 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <OutputType Condition="'$(TargetFramework)' == 'net8.0-windows'">WinExe</OutputType>
+    <OutputType Condition="'$(TargetFramework)' == 'net8.0'">Exe</OutputType>
+    <UseWindowsForms Condition="'$(TargetFramework)' == 'net8.0-windows'">true</UseWindowsForms>
+    <EnableWindowsTargeting Condition="'$(TargetFramework)' == 'net8.0-windows'">true</EnableWindowsTargeting>
+    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
     <RootNamespace>Arbot__V_Console___V_FileData_</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <ApplicationIcon Condition="'$(TargetFramework)' == 'net8.0-windows'">logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ArbotDesktop.cs" Condition="'$(TargetFramework)' == 'net8.0'" />
     <Content Include="logo.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="raylib-cs" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
   </ItemGroup>
 
   <ItemGroup>

@@ -825,8 +825,8 @@ namespace Arbot__V_Console___V_FileData_
             Timetable.Form = new_room;
         }
 
-        public static Color BackgroundColour { get; set; }
-        public static Color ForegroundColour { get; set; }
+        public static Raylib_cs.Color BackgroundColour { get; set; }
+        public static Raylib_cs.Color ForegroundColour { get; set; }
 
         private static volatile string text = string.Empty;
         public static string Text { get { return text; } set { text = value; } }
@@ -901,19 +901,19 @@ namespace Arbot__V_Console___V_FileData_
 
         public static void Inverse()
         {
-            if (BackgroundColour == Color.White)
+            if (BackgroundColour == Raylib_cs.Color.White)
             {
-                BackgroundColour = Color.Black;
+                BackgroundColour = Raylib_cs.Color.Black;
             } else
             {
-                BackgroundColour = Color.White;
+                BackgroundColour = Raylib_cs.Color.White;
             }
-            if (ForegroundColour == Color.White)
+            if (ForegroundColour == Raylib_cs.Color.White)
             {
-                ForegroundColour = Color.Black;
+                ForegroundColour = Raylib_cs.Color.Black;
             } else
             {
-                ForegroundColour = Color.White;
+                ForegroundColour = Raylib_cs.Color.White;
             }
         }
 
@@ -929,47 +929,17 @@ namespace Arbot__V_Console___V_FileData_
             }
         }
 
-        [System.STAThread]
         static void Main(string[] args)
         {
-            ThreadStart threadStart = new ThreadStart(Window.Program);
-            Thread thread = new Thread(threadStart)
+            if (args.Any(argument => string.Equals(argument, "--web", StringComparison.OrdinalIgnoreCase)))
             {
-                IsBackground = true
-            };
-            thread.Start();
-            Text = "";
-            if(Settings.Dark_mode)
-            {
-                BackgroundColour = Color.White;
-                ForegroundColour = Color.Black;
-            } else {
-                BackgroundColour = Color.Black;
-                ForegroundColour = Color.White;
+                ArbotWebHost.Run(args);
+                return;
             }
 
-            Image logo = Raylib.LoadImage("logo.ico");
-            //Font font = Raylib.LoadFont("CONSOLA.TTF");
-            Raylib.InitWindow(800, 500, "Arbot");
-            Raylib.SetWindowIcon(logo);
-            Raylib.SetTargetFPS(60);
-            
-            while(!Raylib.WindowShouldClose() && thread.IsAlive)
-            { 
-                Raylib.ClearBackground(Window.BackgroundColour);
-                Raylib.BeginDrawing();
-                    //Raylib.DrawTextEx(font, Text, new Vector2(5, 5), 24, 1, Window.ForegroundColour);
-                    Raylib.DrawText(Text, 5, 5, 24, Window.ForegroundColour);
-                Raylib.EndDrawing();
-            }
-
-            //try { thread.Abort(); } catch(Exception) { } finally { }
-            // Do not block on a background thread that may be stuck in input waits.
-            // The window close event is authoritative here and should terminate immediately.
-            //Raylib.UnloadFont(font);
-            Raylib.UnloadImage(logo);
-            Raylib.CloseWindow();
-            return;
+#if WINDOWS
+            ArbotDesktop.Run(args);
+#endif
         }
     }
 
@@ -981,11 +951,21 @@ namespace Arbot__V_Console___V_FileData_
         public static int Negatives { get; set; }
         public static string Password_reset_token { get; set; } = string.Empty;
 
-        public static string password_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Password.txt");
+        public static string password_path = GetLocalPasswordPath();
         public static string name_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Name.txt");
         public static string positives_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Positives.txt");
         public static string negatives_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Negatives.txt");
         public static string password_reset_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Password_reset.txt");
+
+        private static string GetLocalPasswordPath()
+        {
+            var localDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Arbot");
+            Directory.CreateDirectory(localDirectory);
+            var localPath = Path.Combine(localDirectory, "Password.txt");
+            var defaultPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Password.txt");
+            if (!File.Exists(localPath)) File.Copy(defaultPath, localPath);
+            return localPath;
+        }
 
         public static void info(string name, string password, int positives, int negatives, string password_reset_token)
         {
