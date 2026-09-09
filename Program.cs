@@ -88,57 +88,57 @@ namespace Arbot__V_Console___V_FileData_
                 int lesson_num = 0;
                 string next_bell;
                 TimeSpan calculation;
-                TimeSpan cal2;
+                bool school_day = today_weekday != DayOfWeek.Saturday && today_weekday != DayOfWeek.Sunday;
 
-                if (current_time_obj > TimeSpan.Parse("08:40:00") && current_time_obj < TimeSpan.Parse("09:10:00"))
+                if (current_time_obj >= TimeSpan.Parse("08:40:00") && current_time_obj < TimeSpan.Parse("09:10:00"))
                 {
                     period = "Formtime";
                     lesson_num = 0;
                     next_bell = monday_logic("09:10:00");
                 }
-                else if (current_time_obj > TimeSpan.Parse("09:10:00") && current_time_obj < TimeSpan.Parse("10:00:00"))
+                else if (current_time_obj >= TimeSpan.Parse("09:10:00") && current_time_obj < TimeSpan.Parse("10:00:00"))
                 {
                     period = "1";
                     lesson_num = 1;
                     next_bell = monday_logic("10:00:00");
                 }
-                else if (current_time_obj > TimeSpan.Parse("10:00:00") && current_time_obj < TimeSpan.Parse("10:50:00"))
+                else if (current_time_obj >= TimeSpan.Parse("10:00:00") && current_time_obj < TimeSpan.Parse("10:50:00"))
                 {
                     period = "2";
                     lesson_num = 2;
                     next_bell = monday_logic("10:50:00");
                 }
-                else if (current_time_obj > TimeSpan.Parse("10:50:00") && current_time_obj < TimeSpan.Parse("11:10:00"))
+                else if (current_time_obj >= TimeSpan.Parse("10:50:00") && current_time_obj < TimeSpan.Parse("11:10:00"))
                 {
                     period = "Breaktime";
                     lesson_num = 3;
                     next_bell = monday_logic("11:10:00");
                 }
-                else if (current_time_obj > TimeSpan.Parse("11:10:00") && current_time_obj < TimeSpan.Parse("12:00:00"))
+                else if (current_time_obj >= TimeSpan.Parse("11:10:00") && current_time_obj < TimeSpan.Parse("12:00:00"))
                 {
                     period = "3";
                     lesson_num = 4;
                     next_bell = monday_logic("12:00:00");
                 }
-                else if (current_time_obj > TimeSpan.Parse("12:00:00") && current_time_obj < TimeSpan.Parse("12:50:00"))
+                else if (current_time_obj >= TimeSpan.Parse("12:00:00") && current_time_obj < TimeSpan.Parse("12:50:00"))
                 {
                     period = "4";
                     lesson_num = 5;
                     next_bell = monday_logic("12:50:00");
                 }
-                else if (current_time_obj > TimeSpan.Parse("12:50:00") && current_time_obj < TimeSpan.Parse("13:30:00"))
+                else if (current_time_obj >= TimeSpan.Parse("12:50:00") && current_time_obj < TimeSpan.Parse("13:30:00"))
                 {
                     period = "Lunchtime";
                     lesson_num = 6;
                     next_bell = "13:30:00";
                 }
-                else if (current_time_obj > TimeSpan.Parse("13:30:00") && current_time_obj < TimeSpan.Parse("14:20:00"))
+                else if (current_time_obj >= TimeSpan.Parse("13:30:00") && current_time_obj < TimeSpan.Parse("14:20:00"))
                 {
                     period = "5";
                     lesson_num = 7;
                     next_bell = "14:20:00";
                 }
-                else if (current_time_obj > TimeSpan.Parse("14:20:00") && current_time_obj < TimeSpan.Parse("15:10:00"))
+                else if (current_time_obj >= TimeSpan.Parse("14:20:00") && current_time_obj < TimeSpan.Parse("15:10:00"))
                 {
                     period = "6";
                     lesson_num = 8;
@@ -185,17 +185,19 @@ namespace Arbot__V_Console___V_FileData_
                 string next_lesson = lessons[lesson_num + 1];
 
                 calculation = TimeSpan.Parse(next_bell).Subtract(current_time_obj);
-                cal2 = calculation + calculation;
 
-                if (today_weekday != DayOfWeek.Saturday && today_weekday != DayOfWeek.Sunday)
+                if (school_day)
                 {
-                    if (cal2 >= TimeSpan.Parse("00:00:00"))
+                    if (calculation >= TimeSpan.Zero)
                     {
                         write($"The day is {today_weekday} and we are in period {period}, the current lesson is {current_lesson} and the next lesson is {next_lesson}. The next bell is at {next_bell} and it is in {calculation} hours, minutes and seconds respectively.");
                     }
+                    else
+                    {
+                        write($"The day is {today_weekday} and there are no lessons on.");
+                    }
                 }
-
-                if (cal2 <= TimeSpan.Parse("00:00:00") || today_weekday == DayOfWeek.Saturday || today_weekday == DayOfWeek.Sunday)
+                else
                 {
                     write($"The day is {today_weekday} and there are no lessons on.");
                 }
@@ -227,7 +229,7 @@ namespace Arbot__V_Console___V_FileData_
                         clear();
                         write("How many positives/credits have you gained? :)");
                         string middle = read(null);
-                        if(int.TryParse(middle, out int i1))
+                        if(!int.TryParse(middle, out int i1))
                         {
                             write("That is not a number.");
                             Thread.Sleep(500);
@@ -247,7 +249,7 @@ namespace Arbot__V_Console___V_FileData_
                         clear();
                         write("How many negatives have you ained? :(");
                         middle = read(null);
-                        if(int.TryParse(middle, out int i2))
+                        if(!int.TryParse(middle, out int i2))
                         {
                             write("That is not a number.");
                             Thread.Sleep(500);
@@ -255,8 +257,8 @@ namespace Arbot__V_Console___V_FileData_
                             goto start_command2;
                         }
                         int many2 = i2;
-                        File.WriteAllText(Info.positives_path, (Info.Positives + many2).ToString());
-                        Info.Positives = int.Parse(File.ReadAllText(Info.positives_path));
+                        File.WriteAllText(Info.negatives_path, (Info.Negatives + many2).ToString());
+                        Info.Negatives = int.Parse(File.ReadAllText(Info.negatives_path));
                         write("Done");
                         write("Press any key");
                         read_key();
@@ -818,15 +820,15 @@ namespace Arbot__V_Console___V_FileData_
         public static void Change_form()
         {
             write("What room is your new form?");
-            string new_room = read(null);
-            File.WriteAllText(Timetable.form_path, $" Form {new_room}");
+            string new_room = read(null).Trim();
+            File.WriteAllText(Timetable.form_path, new_room);
             Timetable.Form = new_room;
         }
 
         public static Color BackgroundColour { get; set; }
         public static Color ForegroundColour { get; set; }
 
-        private static volatile string text;
+        private static volatile string text = string.Empty;
         public static string Text { get { return text; } set { text = value; } }
 
         public static void write(string what_to_write, bool new_line = true)
@@ -931,7 +933,10 @@ namespace Arbot__V_Console___V_FileData_
         static void Main(string[] args)
         {
             ThreadStart threadStart = new ThreadStart(Window.Program);
-            Thread thread = new Thread(threadStart);
+            Thread thread = new Thread(threadStart)
+            {
+                IsBackground = true
+            };
             thread.Start();
             Text = "";
             if(Settings.Dark_mode)
@@ -959,20 +964,22 @@ namespace Arbot__V_Console___V_FileData_
             }
 
             //try { thread.Abort(); } catch(Exception) { } finally { }
-            thread.Join(); 
+            // Do not block on a background thread that may be stuck in input waits.
+            // The window close event is authoritative here and should terminate immediately.
             //Raylib.UnloadFont(font);
             Raylib.UnloadImage(logo);
             Raylib.CloseWindow();
+            return;
         }
     }
 
     public class Info
     {
-        public static string? Name { get; set; }
-        public static string? Password { get; set; }
-        public static int? Positives { get; set; }
-        public static int? Negatives { get; set; }
-        public static string? Password_reset_token { get; set; }
+        public static string Name { get; set; } = string.Empty;
+        public static string Password { get; set; } = string.Empty;
+        public static int Positives { get; set; }
+        public static int Negatives { get; set; }
+        public static string Password_reset_token { get; set; } = string.Empty;
 
         public static string password_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Password.txt");
         public static string name_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Name.txt");
@@ -992,51 +999,51 @@ namespace Arbot__V_Console___V_FileData_
 
     public class Timetable
     {
-        public static string? Form { get; set; }
-        public static string? Mon_p1 { get; set; }
-        public static string? Mon_p2 { get; set; }
-        public static string? Mon_p3 { get; set; }
-        public static string? Mon_p4 { get; set; }
-        public static string? Mon_lunch { get; set; }
-        public static string? Mon_p5 { get; set; }
-        public static string? Mon_p6 { get; set; }
-        public static string? Mon_home { get; set; }
+        public static string Form { get; set; } = string.Empty;
+        public static string Mon_p1 { get; set; } = string.Empty;
+        public static string Mon_p2 { get; set; } = string.Empty;
+        public static string Mon_p3 { get; set; } = string.Empty;
+        public static string Mon_p4 { get; set; } = string.Empty;
+        public static string Mon_lunch { get; set; } = string.Empty;
+        public static string Mon_p5 { get; set; } = string.Empty;
+        public static string Mon_p6 { get; set; } = string.Empty;
+        public static string Mon_home { get; set; } = string.Empty;
 
-        public static string? Tue_p1 { get; set; }
-        public static string? Tue_p2 { get; set; }
-        public static string? Tue_p3 { get; set; }
-        public static string? Tue_p4 { get; set; }
-        public static string? Tue_lunch { get; set; }
-        public static string? Tue_p5 { get; set; }
-        public static string? Tue_p6 { get; set; }
-        public static string? Tue_home { get; set; }
+        public static string Tue_p1 { get; set; } = string.Empty;
+        public static string Tue_p2 { get; set; } = string.Empty;
+        public static string Tue_p3 { get; set; } = string.Empty;
+        public static string Tue_p4 { get; set; } = string.Empty;
+        public static string Tue_lunch { get; set; } = string.Empty;
+        public static string Tue_p5 { get; set; } = string.Empty;
+        public static string Tue_p6 { get; set; } = string.Empty;
+        public static string Tue_home { get; set; } = string.Empty;
 
-        public static string? Wed_p1 { get; set; }
-        public static string? Wed_p2 { get; set; }
-        public static string? Wed_p3 { get; set; }
-        public static string? Wed_p4 { get; set; }
-        public static string? Wed_lunch { get; set; }
-        public static string? Wed_p5 { get; set; }
-        public static string? Wed_p6 { get; set; }
-        public static string? Wed_home { get; set; }
+        public static string Wed_p1 { get; set; } = string.Empty;
+        public static string Wed_p2 { get; set; } = string.Empty;
+        public static string Wed_p3 { get; set; } = string.Empty;
+        public static string Wed_p4 { get; set; } = string.Empty;
+        public static string Wed_lunch { get; set; } = string.Empty;
+        public static string Wed_p5 { get; set; } = string.Empty;
+        public static string Wed_p6 { get; set; } = string.Empty;
+        public static string Wed_home { get; set; } = string.Empty;
 
-        public static string? Thu_p1 { get; set; }
-        public static string? Thu_p2 { get; set; }
-        public static string? Thu_p3 { get; set; }
-        public static string? Thu_p4 { get; set; }
-        public static string? Thu_lunch { get; set; }
-        public static string? Thu_p5 { get; set; }
-        public static string? Thu_p6 { get; set; }
-        public static string? Thu_home { get; set; }
+        public static string Thu_p1 { get; set; } = string.Empty;
+        public static string Thu_p2 { get; set; } = string.Empty;
+        public static string Thu_p3 { get; set; } = string.Empty;
+        public static string Thu_p4 { get; set; } = string.Empty;
+        public static string Thu_lunch { get; set; } = string.Empty;
+        public static string Thu_p5 { get; set; } = string.Empty;
+        public static string Thu_p6 { get; set; } = string.Empty;
+        public static string Thu_home { get; set; } = string.Empty;
 
-        public static string? Fri_p1 { get; set; }
-        public static string? Fri_p2 { get; set; }
-        public static string? Fri_p3 { get; set; }
-        public static string? Fri_p4 { get; set; }
-        public static string? Fri_lunch { get; set; }
-        public static string? Fri_p5 { get; set; }
-        public static string? Fri_p6 { get; set; }
-        public static string? Fri_home { get; set; }
+        public static string Fri_p1 { get; set; } = string.Empty;
+        public static string Fri_p2 { get; set; } = string.Empty;
+        public static string Fri_p3 { get; set; } = string.Empty;
+        public static string Fri_p4 { get; set; } = string.Empty;
+        public static string Fri_lunch { get; set; } = string.Empty;
+        public static string Fri_p5 { get; set; } = string.Empty;
+        public static string Fri_p6 { get; set; } = string.Empty;
+        public static string Fri_home { get; set; } = string.Empty;
 
         public static string form_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Lessons", "Form.txt");
         public static string monday_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Lessons", "Monday.txt");
