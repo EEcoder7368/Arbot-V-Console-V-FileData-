@@ -949,7 +949,7 @@ namespace Arbot__V_Console___V_FileData_
             Raylib.SetWindowIcon(logo);
             Raylib.SetTargetFPS(60);
             
-            while(!Raylib.WindowShouldClose() || !thread.IsAlive)
+            while(!Raylib.WindowShouldClose() && thread.IsAlive)
             { 
                 Raylib.ClearBackground(Window.BackgroundColour);
                 Raylib.BeginDrawing();
