@@ -963,9 +963,6 @@ namespace Arbot__V_Console___V_FileData_
                 Raylib.EndDrawing();
             }
 
-            //try { thread.Abort(); } catch(Exception) { } finally { }
-            // Do not block on a background thread that may be stuck in input waits.
-            // The window close event is authoritative here and should terminate immediately.
             //Raylib.UnloadFont(font);
             Raylib.UnloadImage(logo);
             Raylib.CloseWindow();
