@@ -1,13 +1,8 @@
 # Security Policy
 
-## Supported Versions
+## Security
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
-
-| Version | Supported          |
-| ------- | ------------------ |
-| >1.0.x   |       ✅          |
+Since our files are solely local on the computer, we cannot get hacked by an external source UNLESS they hack past your devices security features
 
 ## Reporting a Vulnerability
 
