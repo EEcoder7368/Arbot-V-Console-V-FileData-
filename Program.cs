@@ -191,7 +191,7 @@ namespace Arbot__V_Console___V_FileData_
                 {
                     if (cal2 >= TimeSpan.Parse("00:00:00"))
                     {
-                        write($"The day is {today_weekday} and we are in the {period}^th period of the day and the current lesson is {current_lesson} and the next lesson is {next_lesson}. The next bell is at {next_bell} and it is in {calculation} hours, minutes and seconds respectively.");
+                        write($"The day is {today_weekday} and we are in period {period}, the current lesson is {current_lesson} and the next lesson is {next_lesson}. The next bell is at {next_bell} and it is in {calculation} hours, minutes and seconds respectively.");
                     }
                 }
 
@@ -225,7 +225,7 @@ namespace Arbot__V_Console___V_FileData_
                         case "1":
                         start_command1:
                         clear();
-                        write("How many positives/credits have you gotten? :)");
+                        write("How many positives/credits have you gained? :)");
                         string middle = read(null);
                         if(int.TryParse(middle, out int i1))
                         {
@@ -245,7 +245,7 @@ namespace Arbot__V_Console___V_FileData_
                         case "2":
                         start_command2:
                         clear();
-                        write("How many negatives have you gotten? :(");
+                        write("How many negatives have you ained? :(");
                         middle = read(null);
                         if(int.TryParse(middle, out int i2))
                         {
