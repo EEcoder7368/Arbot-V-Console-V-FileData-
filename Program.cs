@@ -940,6 +940,7 @@ namespace Arbot__V_Console___V_FileData_
 #if WINDOWS
             ArbotDesktop.Run(args);
 #endif
+            return;
         }
     }
 
