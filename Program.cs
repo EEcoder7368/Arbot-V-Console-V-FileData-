@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.JSInterop.Infrastructure;
 using Raylib_cs;
 
 namespace Arbot__V_Console___V_FileData_
@@ -975,21 +974,11 @@ namespace Arbot__V_Console___V_FileData_
         public static int Negatives { get; set; }
         public static string Password_reset_token { get; set; } = string.Empty;
 
-        public static string password_path = GetLocalPasswordPath();
+        public static string password_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Password.txt");
         public static string name_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Name.txt");
         public static string positives_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Positives.txt");
         public static string negatives_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Negatives.txt");
         public static string password_reset_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Password_reset.txt");
-
-        private static string GetLocalPasswordPath()
-        {
-            var localDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Arbot");
-            Directory.CreateDirectory(localDirectory);
-            var localPath = Path.Combine(localDirectory, "Password.txt");
-            var defaultPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Info", "Password.txt");
-            if (!File.Exists(localPath)) File.Copy(defaultPath, localPath);
-            return localPath;
-        }
 
         public static void info(string name, string password, int positives, int negatives, string password_reset_token)
         {
