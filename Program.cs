@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.JSInterop.Infrastructure;
 using Raylib_cs;
 
 namespace Arbot__V_Console___V_FileData_
@@ -929,18 +930,40 @@ namespace Arbot__V_Console___V_FileData_
             }
         }
 
+        [System.STAThread]
         static void Main(string[] args)
         {
-            if (args.Any(argument => string.Equals(argument, "--web", StringComparison.OrdinalIgnoreCase)))
+            ThreadStart threadStart = new ThreadStart(Window.Program);
+            Thread thread = new Thread(threadStart);
+            thread.Start();
+            Text = "";
+            if(Settings.Dark_mode)
             {
-                ArbotWebHost.Run(args);
-                return;
+                BackgroundColour = Color.Black;
+                ForegroundColour = Color.White;
+            } else {
+                BackgroundColour = Color.White;
+                ForegroundColour = Color.Black;
             }
 
-#if WINDOWS
-            ArbotDesktop.Run(args);
-#endif
-            return;
+            Image logo = Raylib.LoadImage("logo.ico");
+            //Font font = Raylib.LoadFont("CONSOLA.TTF");
+            Raylib.InitWindow(800, 500, "Arbot");
+            Raylib.SetWindowIcon(logo);
+            Raylib.SetTargetFPS(60);
+        
+            while(!Raylib.WindowShouldClose() && thread.IsAlive)
+            {
+                Raylib.ClearBackground(Window.BackgroundColour);
+                Raylib.BeginDrawing();
+                    //Raylib.DrawTextEx(font, Text, new Vector2(5, 5), 24, 1, Window.ForegroundColour);
+                    Raylib.DrawText(Text, 5, 5, 24, Window.ForegroundColour);
+                Raylib.EndDrawing();
+            }
+
+            //Raylib.UnloadFont(font);
+            Raylib.UnloadImage(logo);
+            Raylib.CloseWindow();
         }
     }
 
