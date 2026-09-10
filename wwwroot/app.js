@@ -1,7 +1,7 @@
 const $ = (id) => document.getElementById(id);
 const storageKey = 'arbotPagesState';
 const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-const emptyDay = ['Not set', 'Not set', 'Not set', 'Not set', 'Lunch', 'Not set', 'Not set'];
+const emptyDay = ['Not set', 'Not set', 'Not set', 'Not set', 'Not set', 'Not set', 'Not set'];
 
 function initialState() {
   return {
@@ -17,7 +17,14 @@ function initialState() {
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey));
-    return saved ? { ...initialState(), ...saved, settings: { ...initialState().settings, ...saved.settings }, timetable: { ...initialState().timetable, ...saved.timetable } } : initialState();
+    if (!saved) return initialState();
+    const base = initialState();
+    const timetable = Object.fromEntries(dayNames.map((day) => {
+      const savedDay = saved.timetable?.[day.toLowerCase()];
+      const lessons = Array.isArray(savedDay) ? savedDay.slice(0, 7) : [...emptyDay];
+      return [day.toLowerCase(), [...lessons, ...emptyDay].slice(0, 7)];
+    }));
+    return { ...base, ...saved, settings: { ...base.settings, ...saved.settings }, timetable };
   } catch {
     return initialState();
   }
@@ -33,7 +40,6 @@ function localPeriod(time) {
   if (minutes >= 600 && minutes < 650) return 2;
   if (minutes >= 670 && minutes < 720) return 3;
   if (minutes >= 720 && minutes < 770) return 4;
-  if (minutes >= 770 && minutes < 810) return 'Lunch';
   if (minutes >= 810 && minutes < 860) return 5;
   if (minutes >= 860 && minutes < 910) return 6;
   if (minutes >= 650 && minutes < 670) return 'Break';
@@ -58,7 +64,7 @@ function render() {
   $('negatives').textContent = state.negatives;
   $('day').textContent = day.toUpperCase();
   $('lesson').textContent = currentLesson;
-  $('lessonMeta').textContent = typeof period === 'number' && period > 0 ? `Period ${period} is in session` : period === 'Break' ? 'Breaktime' : period === 'Lunch' ? 'Lunch' : 'No lessons are currently on';
+  $('lessonMeta').textContent = typeof period === 'number' && period > 0 ? `Period ${period} is in session` : period === 'Break' ? 'Breaktime' : 'No lessons are currently on';
   $('nameInput').value = state.name;
   $('useName').checked = state.settings.useName;
   $('darkMode').checked = state.settings.darkMode;

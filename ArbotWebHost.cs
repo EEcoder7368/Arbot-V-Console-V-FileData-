@@ -104,7 +104,8 @@ public static class ArbotWebHost
             };
             if (path.Length == 0) return Results.BadRequest(new { message = "Choose a weekday." });
             var lessons = File.ReadAllText(path).Split(':');
-            var lessonIndex = data.Period >= 5 ? data.Period : data.Period - 1;
+            var lessonIndex = data.Period - 1;
+            if (data.Period >= 5) lessonIndex++;
             lessons[lessonIndex] = data.Lesson.Trim();
             File.WriteAllText(path, string.Join(':', lessons));
             ReloadTimetable();
@@ -142,22 +143,22 @@ public static class ArbotWebHost
         var weekday = now.DayOfWeek;
         var lessons = weekday switch
         {
-            DayOfWeek.Monday => WebDay(Timetable.Form, Timetable.Mon_p1, Timetable.Mon_p2, Timetable.Mon_p3, Timetable.Mon_p4, Timetable.Mon_lunch, Timetable.Mon_p5, Timetable.Mon_p6),
-            DayOfWeek.Tuesday => WebDay(Timetable.Form, Timetable.Tue_p1, Timetable.Tue_p2, Timetable.Tue_p3, Timetable.Tue_p4, Timetable.Tue_lunch, Timetable.Tue_p5, Timetable.Tue_p6),
-            DayOfWeek.Wednesday => WebDay(Timetable.Form, Timetable.Wed_p1, Timetable.Wed_p2, Timetable.Wed_p3, Timetable.Wed_p4, Timetable.Wed_lunch, Timetable.Wed_p5, Timetable.Wed_p6),
-            DayOfWeek.Thursday => WebDay(Timetable.Form, Timetable.Thu_p1, Timetable.Thu_p2, Timetable.Thu_p3, Timetable.Thu_p4, Timetable.Thu_lunch, Timetable.Thu_p5, Timetable.Thu_p6),
-            DayOfWeek.Friday => WebDay(Timetable.Form, Timetable.Fri_p1, Timetable.Fri_p2, Timetable.Fri_p3, Timetable.Fri_p4, Timetable.Fri_lunch, Timetable.Fri_p5, Timetable.Fri_p6),
+            DayOfWeek.Monday => WebDay(Timetable.Form, Timetable.Mon_p1, Timetable.Mon_p2, Timetable.Mon_p3, Timetable.Mon_p4, Timetable.Mon_p5, Timetable.Mon_p6),
+            DayOfWeek.Tuesday => WebDay(Timetable.Form, Timetable.Tue_p1, Timetable.Tue_p2, Timetable.Tue_p3, Timetable.Tue_p4, Timetable.Tue_p5, Timetable.Tue_p6),
+            DayOfWeek.Wednesday => WebDay(Timetable.Form, Timetable.Wed_p1, Timetable.Wed_p2, Timetable.Wed_p3, Timetable.Wed_p4, Timetable.Wed_p5, Timetable.Wed_p6),
+            DayOfWeek.Thursday => WebDay(Timetable.Form, Timetable.Thu_p1, Timetable.Thu_p2, Timetable.Thu_p3, Timetable.Thu_p4, Timetable.Thu_p5, Timetable.Thu_p6),
+            DayOfWeek.Friday => WebDay(Timetable.Form, Timetable.Fri_p1, Timetable.Fri_p2, Timetable.Fri_p3, Timetable.Fri_p4, Timetable.Fri_p5, Timetable.Fri_p6),
             _ => Array.Empty<string>()
         };
         var period = GetPeriod(now.TimeOfDay);
         var timetable = new
         {
             form = Timetable.Form,
-            monday = WebDay(Timetable.Form, Timetable.Mon_p1, Timetable.Mon_p2, Timetable.Mon_p3, Timetable.Mon_p4, Timetable.Mon_lunch, Timetable.Mon_p5, Timetable.Mon_p6),
-            tuesday = WebDay(Timetable.Form, Timetable.Tue_p1, Timetable.Tue_p2, Timetable.Tue_p3, Timetable.Tue_p4, Timetable.Tue_lunch, Timetable.Tue_p5, Timetable.Tue_p6),
-            wednesday = WebDay(Timetable.Form, Timetable.Wed_p1, Timetable.Wed_p2, Timetable.Wed_p3, Timetable.Wed_p4, Timetable.Wed_lunch, Timetable.Wed_p5, Timetable.Wed_p6),
-            thursday = WebDay(Timetable.Form, Timetable.Thu_p1, Timetable.Thu_p2, Timetable.Thu_p3, Timetable.Thu_p4, Timetable.Thu_lunch, Timetable.Thu_p5, Timetable.Thu_p6),
-            friday = WebDay(Timetable.Form, Timetable.Fri_p1, Timetable.Fri_p2, Timetable.Fri_p3, Timetable.Fri_p4, Timetable.Fri_lunch, Timetable.Fri_p5, Timetable.Fri_p6)
+            monday = WebDay(Timetable.Form, Timetable.Mon_p1, Timetable.Mon_p2, Timetable.Mon_p3, Timetable.Mon_p4, Timetable.Mon_p5, Timetable.Mon_p6),
+            tuesday = WebDay(Timetable.Form, Timetable.Tue_p1, Timetable.Tue_p2, Timetable.Tue_p3, Timetable.Tue_p4, Timetable.Tue_p5, Timetable.Tue_p6),
+            wednesday = WebDay(Timetable.Form, Timetable.Wed_p1, Timetable.Wed_p2, Timetable.Wed_p3, Timetable.Wed_p4, Timetable.Wed_p5, Timetable.Wed_p6),
+            thursday = WebDay(Timetable.Form, Timetable.Thu_p1, Timetable.Thu_p2, Timetable.Thu_p3, Timetable.Thu_p4, Timetable.Thu_p5, Timetable.Thu_p6),
+            friday = WebDay(Timetable.Form, Timetable.Fri_p1, Timetable.Fri_p2, Timetable.Fri_p3, Timetable.Fri_p4, Timetable.Fri_p5, Timetable.Fri_p6)
         };
         var settings = new { fastLoad = Settings.Fast_load, useName = Settings.Name_or_master, darkMode = Settings.Dark_mode };
         return new { name = Settings.Name_or_master ? Info.Name : "Master", positives = Info.Positives, negatives = Info.Negatives, day = weekday.ToString(), period, currentLesson = period > 0 && lessons.Length > period ? lessons[period] : "No lesson", timetable, settings };
@@ -175,7 +176,7 @@ public static class ArbotWebHost
     }
 
     private static string[] Day(params string[] lessons) => lessons;
-    private static string[] WebDay(string form, string p1, string p2, string p3, string p4, string lunch, string p5, string p6) => new[] { form, p1, p2, "Breaktime", p3, p4, lunch, p5, p6 };
+    private static string[] WebDay(string form, string p1, string p2, string p3, string p4, string p5, string p6) => new[] { form, p1, p2, "Breaktime", p3, p4, p5, p6 };
     private static string[] TimetablePaths() => new[]
     {
         Timetable.monday_path,
