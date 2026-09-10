@@ -1,7 +1,7 @@
 const $ = (id) => document.getElementById(id);
 const storageKey = 'arbotPagesState';
 const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-const emptyDay = ['Not set', 'Not set', 'Not set', 'Not set', 'Not set', 'Not set', 'Not set'];
+const emptyDay = ['-', '-', '-', '-', -', '-', '-'];
 
 function initialState() {
   return {
