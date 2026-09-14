@@ -64,12 +64,12 @@ namespace Setup
       
       File.Delete(Settings.Settings_path);
 
-      File.Delete("Program.cs");
-      File.Delete("logo.ico");
-      File.Delete("setup.cs");
-      File.Delete("LICENSE");
-      File.Delete("Arbot (V Console) (V FileData).csproj");
-      File.Delete("Arbot (V Console) (V FileData).sln");
+      File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Program.cs"));
+      File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logo.ico"));
+      File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "setup.cs"));
+      File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LICENSE"));
+      File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData).csproj"));
+      File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData).sln"));
     }
   }
 }
