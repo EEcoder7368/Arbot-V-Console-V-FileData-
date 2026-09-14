@@ -15,11 +15,15 @@ namespace Setup
         {
           HttpResponseMessage response = client.Get(url);
           response.EnsureSuccessStatusCode();
-          
           string fileContent = response.Content.ReadAsString();
+          bool is_same = (fileContent == File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Program.cs"));
+
+          if(!is_same) { File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Program.cs", fileContent)); }
         } catch(HttpRequestExeption e) {
           Window.write("Please screenshot this screen and send it to hyper.games.company@gmail.com");
           Window.write(e.ToString());
+          Window.write("\nPress any key to exit...");
+          Window.read_key();
         }
       }
     }
@@ -35,46 +39,12 @@ namespace Setup
       File.Delete(Info.negatives_path);
       File.Delete(Info.password_reset_path);
 
-      File.Delete(Lessons.Form);
-      File.Delete(Lessons.Mon_p1);
-      File.Delete(Lessons.Mon_p2);
-      File.Delete(Lessons.Mon_p3);
-      File.Delete(Lessons.Mon_p4);
-      File.Delete(Lessons.Mon_lunch);
-      File.Delete(Lessons.Mon_p5);
-      File.Delete(Lessons.Mon_p6);
-
-      File.Delete(Lessons.Tue_p1);
-      File.Delete(Lessons.Tue_p2);
-      File.Delete(Lessons.Tue_p3);
-      File.Delete(Lessons.Tue_p4);
-      File.Delete(Lessons.Tue_lunch);
-      File.Delete(Lessons.Tue_p5);
-      File.Delete(Lessons.Tue_p6);
-      
-      File.Delete(Lessons.Wed_p1);
-      File.Delete(Lessons.Wed_p2);
-      File.Delete(Lessons.Wed_p3);
-      File.Delete(Lessons.Wed_p4);
-      File.Delete(Lessons.Wed_lunch);
-      File.Delete(Lessons.Wed_p5);
-      File.Delete(Lessons.Wed_p6);
-
-      File.Delete(Lessons.Thu_p1);
-      File.Delete(Lessons.Thu_p2);
-      File.Delete(Lessons.Thu_p3);
-      File.Delete(Lessons.Thu_p4);
-      File.Delete(Lessons.Thu_lunch);
-      File.Delete(Lessons.Thu_p5);
-      File.Delete(Lessons.Thu_p6);
-
-      File.Delete(Lessons.Fri_p1);
-      File.Delete(Lessons.Fri_p2);
-      File.Delete(Lessons.Fri_p3);
-      File.Delete(Lessons.Fri_p4);
-      File.Delete(Lessons.Fri_lunch);
-      File.Delete(Lessons.Fri_p5);
-      File.Delete(Lessons.Fri_p6);
+      File.Delete(Lessons.form_path);
+      File.Delete(Lessons.monday_path);
+      File.Delete(Lessons.tuesday_path);
+      File.Delete(Lessons.wednesday_path);
+      File.Delete(Lessons.thursday_path);
+      File.Delete(Lessons.friday_path);
       
       File.Delete(Settings.Settings_path);
 
