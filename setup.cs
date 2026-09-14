@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using Arbot__V_Console___V_FileData_;
 
 namespace Setup
@@ -7,7 +8,20 @@ namespace Setup
   {
     public static void update()
     {
-      Console.WriteLine("Hi");
+      string url = "https://raw.githubusercontent.com/EEcoder7368/Arbot-V-Console-V-FileData-/refs/heads/no_web_app/Program.cs?scrlybrkr=34243470";
+      using(HttpClient client = new HttpClient())
+      {
+        try
+        {
+          HttpResponseMessage response = client.Get(url);
+          response.EnsureSuccessStatusCode();
+          
+          string fileContent = response.Content.ReadAsString();
+        } catch(HttpRequestExeption e) {
+          Window.write("Please screenshot this screen and send it to hyper.games.company@gmail.com");
+          Window.write(e.ToString());
+        }
+      }
     }
   }
 
