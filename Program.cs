@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Raylib_cs;
+using Setup;
 
 namespace Arbot__V_Console___V_FileData_
 {
@@ -393,7 +394,8 @@ namespace Arbot__V_Console___V_FileData_
                         write("5)    Change your name");
                         write("6)    Generate password reset token");
                         write("7)    Clear positives/negatives");
-                        write("8)    Exit Settings");
+                        write("8)    Version Control");
+                        write("9)    Exit Settings");
                         string choice2 = read(null);
                         switch(choice2)
                         {
@@ -415,7 +417,7 @@ namespace Arbot__V_Console___V_FileData_
 
                             case "4":
                             start_command4_1:
-                            Window.clear();
+                            clear();
                             write("Enter your old password");
                             string old = read('*');
                             if(old == Info.Password)
@@ -446,7 +448,7 @@ namespace Arbot__V_Console___V_FileData_
                             }
 
                             case "5":
-                            Window.clear();
+                            clear();
                             write("Enter your new name");
                             File.WriteAllText(Info.name_path, read(null));
                             Info.Name = File.ReadAllText(Info.name_path);
@@ -471,7 +473,7 @@ namespace Arbot__V_Console___V_FileData_
 
                             case "7":
                             start_command4_2:
-                            Window.clear();
+                            clear();
                             write("\nWould you like to clear Positives(p) or Negatives(n)?");
                             string clear = read(null);
                             if (clear.ToLower() == "p")
@@ -497,6 +499,28 @@ namespace Arbot__V_Console___V_FileData_
                             goto start_command4;
 
                             case "8":
+                            start_command4_3:
+                            clear();
+                            write("What would you like to do?");
+                            write("1)    Force update app");
+                            write("2)    Delete app");
+                            string choice3 = read();
+                            if(choice3 == "1")
+                            {
+                                Updater.update();
+                            } else if(choice3 == "2") {
+                                //Add "Are you sure?"
+                                Uninstaller.install();
+                            } else {
+                                write("Invalid");
+                                write("Please pick 1 or 2");
+                                write("Press any key to continue...");
+                                read_key;
+                                goto start_command4_3;
+                            }
+                            goto start_command4;
+                           
+                            case "9":
                             goto command_choice;
 
                             default:
@@ -932,6 +956,7 @@ namespace Arbot__V_Console___V_FileData_
         [System.STAThread]
         static void Main(string[] args)
         {
+            Updater.update();
             ThreadStart threadStart = new ThreadStart(Window.Program);
             Thread thread = new Thread(threadStart);
             thread.Start();
@@ -946,7 +971,8 @@ namespace Arbot__V_Console___V_FileData_
             }
 
             Image logo = Raylib.LoadImage("logo.ico");
-            //Font font = Raylib.LoadFont("CONSOLA.TTF");
+            //Font font = Raylib.LoadFontEx("CONSOLA.TTF", 24, 0, 0);
+            //SetTextureFilter(terminalFont.texture, TEXTURE_FILTER_POINT);
             Raylib.InitWindow(800, 500, "Arbot");
             Raylib.SetWindowIcon(logo);
             Raylib.SetTargetFPS(60);
