@@ -16,9 +16,9 @@ namespace Setup
           HttpResponseMessage response = client.Get(url);
           response.EnsureSuccessStatusCode();
           string fileContent = response.Content.ReadAsString();
-          bool is_same = (fileContent == File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Program.cs"));
+          bool is_same = (fileContent == File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Program.cs")));
 
-          if(!is_same) { File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Program.cs", fileContent)); }
+          if(!is_same) { File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Program.cs"), fileContent); }
         } catch(HttpRequestExeption e) {
           Window.write("Please screenshot this screen and send it to hyper.games.company@gmail.com");
           Window.write(e.ToString());
@@ -39,12 +39,12 @@ namespace Setup
       File.Delete(Info.negatives_path);
       File.Delete(Info.password_reset_path);
 
-      File.Delete(Lessons.form_path);
-      File.Delete(Lessons.monday_path);
-      File.Delete(Lessons.tuesday_path);
-      File.Delete(Lessons.wednesday_path);
-      File.Delete(Lessons.thursday_path);
-      File.Delete(Lessons.friday_path);
+      File.Delete(Timetable.form_path);
+      File.Delete(Timetable.monday_path);
+      File.Delete(Timetable.tuesday_path);
+      File.Delete(Timetable.wednesday_path);
+      File.Delete(Timetable.thursday_path);
+      File.Delete(Timetable.friday_path);
       
       File.Delete(Settings.Settings_path);
 

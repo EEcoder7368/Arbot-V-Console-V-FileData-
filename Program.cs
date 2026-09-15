@@ -417,7 +417,7 @@ namespace Arbot__V_Console___V_FileData_
 
                             case "4":
                             start_command4_1:
-                            clear();
+                            Window.clear();
                             write("Enter your old password");
                             string old = read('*');
                             if(old == Info.Password)
@@ -448,7 +448,7 @@ namespace Arbot__V_Console___V_FileData_
                             }
 
                             case "5":
-                            clear();
+                            Window.clear();
                             write("Enter your new name");
                             File.WriteAllText(Info.name_path, read(null));
                             Info.Name = File.ReadAllText(Info.name_path);
@@ -473,7 +473,7 @@ namespace Arbot__V_Console___V_FileData_
 
                             case "7":
                             start_command4_2:
-                            clear();
+                            Window.clear();
                             write("\nWould you like to clear Positives(p) or Negatives(n)?");
                             string clear = read(null);
                             if (clear.ToLower() == "p")
@@ -500,22 +500,22 @@ namespace Arbot__V_Console___V_FileData_
 
                             case "8":
                             start_command4_3:
-                            clear();
+                            Window.clear();
                             write("What would you like to do?");
                             write("1)    Force update app");
                             write("2)    Delete app");
-                            string choice3 = read();
+                            string choice3 = read(null);
                             if(choice3 == "1")
                             {
                                 Updater.update();
                             } else if(choice3 == "2") {
                                 //Add "Are you sure?"
-                                Uninstaller.install();
+                                Uninstaller.uninstall();
                             } else {
                                 write("Invalid");
                                 write("Please pick 1 or 2");
                                 write("Press any key to continue...");
-                                read_key;
+                                read_key();
                                 goto start_command4_3;
                             }
                             goto start_command4;
@@ -963,14 +963,14 @@ namespace Arbot__V_Console___V_FileData_
             Text = "";
             if(Settings.Dark_mode)
             {
-                BackgroundColour = Color.Black;
-                ForegroundColour = Color.White;
+                BackgroundColour = Raylib_cs.Color.Black;
+                ForegroundColour = Raylib_cs.Color.White;
             } else {
-                BackgroundColour = Color.White;
-                ForegroundColour = Color.Black;
+                BackgroundColour = Raylib_cs.Color.White;
+                ForegroundColour = Raylib_cs.Color.Black;
             }
 
-            Image logo = Raylib.LoadImage("logo.ico");
+            Raylib_cs.Image logo = Raylib.LoadImage("logo.ico");
             //Font font = Raylib.LoadFontEx("CONSOLA.TTF", 24, 0, 0);
             //SetTextureFilter(terminalFont.texture, TEXTURE_FILTER_POINT);
             Raylib.InitWindow(800, 500, "Arbot");

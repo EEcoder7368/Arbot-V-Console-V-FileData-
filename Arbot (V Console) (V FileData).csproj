@@ -5,7 +5,7 @@
     <OutputType Condition="'$(TargetFramework)' == 'net8.0'">Exe</OutputType>
     <UseWindowsForms Condition="'$(TargetFramework)' == 'net8.0-windows'">true</UseWindowsForms>
     <EnableWindowsTargeting Condition="'$(TargetFramework)' == 'net8.0-windows'">true</EnableWindowsTargeting>
-    <TargetFrameworks>net8.0;net8.0-windows;net8.0-ios</TargetFrameworks>
+    <TargetFrameworks>net8.0;net8.0-windows;net9.0-ios</TargetFrameworks>
     <RootNamespace>Arbot__V_Console___V_FileData_</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -14,7 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ArbotDesktop.cs" Condition="'$(TargetFramework)' == 'net8.0'" />
     <Content Include="logo.ico" />
   </ItemGroup>
 
