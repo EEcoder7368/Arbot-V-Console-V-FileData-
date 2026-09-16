@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType Condition="'$(TargetFramework)' == 'net9.0-windows'">WinExe</OutputType>
-    <OutputType Condition="'$(TargetFramework)' == 'net9.0'">Exe</OutputType>
+    <OutputType Condition="'$(TargetFramework)' == 'net9.0'">WinExe</OutputType>
     <UseWindowsForms Condition="'$(TargetFramework)' == 'net9.0-windows'">true</UseWindowsForms>
     <EnableWindowsTargeting Condition="'$(TargetFramework)' == 'net9.0-windows'">true</EnableWindowsTargeting>
     <TargetFrameworks>net9.0;net9.0-windows;net9.0-ios</TargetFrameworks>
@@ -11,6 +11,8 @@
     <Nullable>enable</Nullable>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationIcon Condition="'$(TargetFramework)' == 'net9.0-windows'">logo.ico</ApplicationIcon>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <NuGetAuditMode>all</NuGetAuditMode>
   </PropertyGroup>
 
   <ItemGroup>
