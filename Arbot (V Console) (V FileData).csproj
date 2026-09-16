@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType Condition="'$(TargetFramework)' == 'net8.0-windows'">WinExe</OutputType>
-    <OutputType Condition="'$(TargetFramework)' == 'net8.0'">Exe</OutputType>
-    <UseWindowsForms Condition="'$(TargetFramework)' == 'net8.0-windows'">true</UseWindowsForms>
-    <EnableWindowsTargeting Condition="'$(TargetFramework)' == 'net8.0-windows'">true</EnableWindowsTargeting>
-    <TargetFrameworks>net10.0;net10.0-windows;net10.0-ios</TargetFrameworks>
+    <OutputType Condition="'$(TargetFramework)' == 'net9.0-windows'">WinExe</OutputType>
+    <OutputType Condition="'$(TargetFramework)' == 'net9.0'">Exe</OutputType>
+    <UseWindowsForms Condition="'$(TargetFramework)' == 'net9.0-windows'">true</UseWindowsForms>
+    <EnableWindowsTargeting Condition="'$(TargetFramework)' == 'net9.0-windows'">true</EnableWindowsTargeting>
+    <TargetFrameworks>net9.0;net9.0-windows;net9.0-ios</TargetFrameworks>
     <RootNamespace>Arbot__V_Console___V_FileData_</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <ApplicationIcon Condition="'$(TargetFramework)' == 'net8.0-windows'">logo.ico</ApplicationIcon>
+    <ApplicationIcon Condition="'$(TargetFramework)' == 'net9.0-windows'">logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

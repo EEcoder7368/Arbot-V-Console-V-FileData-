@@ -509,8 +509,16 @@ namespace Arbot__V_Console___V_FileData_
                             {
                                 Updater.update();
                             } else if(choice3 == "2") {
-                                //Add "Are you sure?"
-                                Uninstaller.uninstall();
+                                write("\nAre you sure? yes/no");
+                                write("This will DELETE ALL ASSOSEATED DATA!");
+                                write("(You must type the full answer)");
+                                string answer = read(null);
+                                if(answer.ToLower() == "yes")
+                                {
+                                    Uninstaller.uninstall();
+                                } else { 
+                                    goto start_command4;
+                                }
                             } else {
                                 write("Invalid");
                                 write("Please pick 1 or 2");
