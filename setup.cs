@@ -8,7 +8,8 @@ namespace Setup
     {
         public static async void update()
         {
-            string url = "https://raw.githubusercontent.com/EEcoder7368/Arbot-V-Console-V-FileData-/refs/heads/no_web_app/Program.cs";
+            //string url = "https://raw.githubusercontent.com/EEcoder7368/Arbot-V-Console-V-FileData-/refs/heads/no_web_app/Program.cs";
+            string url = "https://raw.githubusercontent.com/EEcoder7368/Arbot-V-Console-V-FileData-/refs/heads/no_web_app/releases/latest/app.zip";
             using(HttpClient client = new HttpClient())
             {
                 try
