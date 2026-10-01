@@ -1,12 +1,13 @@
 using System;
 using System.Net.Http;
+using System.Text.Json;
 using Arbot__V_Console___V_FileData_;
 
 namespace Setup
 {
     public class Updater
     {
-        public static async void update()
+        /*public static async void update()
         {
             //string url = "https://raw.githubusercontent.com/EEcoder7368/Arbot-V-Console-V-FileData-/refs/heads/no_web_app/Program.cs";
             string url = "https://raw.githubusercontent.com/EEcoder7368/Arbot-V-Console-V-FileData-/refs/heads/no_web_app/releases/latest/app.zip";
@@ -26,6 +27,53 @@ namespace Setup
                     Window.write("\nPress any key to exit...");
                     Window.read_key();
                     Environment.Exit(1);
+                }
+            }
+        }*/
+        public static async void update()
+        {
+            string apiUrl = "https://api.github.com/repos/EEcoder7368/Arbot-V-Console-V-FileData-/releases/latest";
+    
+            using(HttpClient client = new HttpClient())
+            {
+                // GitHub API requires a User-Agent header
+                client.DefaultRequestHeaders.Add("User-Agent", "Arbot-Updater");
+                
+                try
+                {
+                    // Get release metadata
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+                    response.EnsureSuccessStatusCode();
+                    string releaseJson = await response.Content.ReadAsStringAsync();
+                    
+                    // Parse JSON to find the app.zip asset URL
+                    // You'll need a JSON library like Newtonsoft.Json (Nuget: Newtonsoft.Json)
+                    // Or use System.Text.Json if on .NET 3.1+
+                    dynamic release = JsonConvert.DeserializeObject(releaseJson);
+                    
+                    // Find the app.zip asset
+                    string downloadUrl = null;
+                    foreach(var asset in release.assets)
+                    {
+                        if(asset.name == "app.zip")
+                        {
+                            downloadUrl = asset.browser_download_url;
+                            break;
+                        }
+                    }
+                    
+                    if(downloadUrl == null)
+                    {
+                        Window.write("app.zip not found in latest release");
+                        return;
+                    }
+                    
+                    // Download the binary file
+                    HttpResponseMessage fileResponse = await client.GetAsync(downloadUrl);
+                    fileResponse.EnsureSuccessStatusCode();
+                    byte[] fileBytes = await fileResponse.Content.ReadAsByteArrayAsync();
+
+                    bool is_same = (fileBytes == File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData).exe")));
                 }
             }
         }
