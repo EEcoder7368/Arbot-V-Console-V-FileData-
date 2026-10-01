@@ -54,14 +54,11 @@ namespace Setup
                     // Find the app.zip asset
                     string downloadUrl = null;
                     string app_name;
-                    #if IOS
+                    #if __IOS__
                         app_name = "Arbot (V Console) (V FileData)_ios";
                     #endif
-                    #if WINDOWS
-                        app_name = "Arbot (V Console) (V FileData)_windows";
-                    #endif
-                    #if LINUX
-                        app_name = "Arbot (V Console) (V FileData)_linux";
+                    #if __DESKTOP__
+                        app_name = "Arbot (V Console) (V FileData)";
                     #endif
                     foreach(var asset in release.assets)
                     {
