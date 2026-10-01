@@ -65,6 +65,7 @@ namespace Setup
                     if(downloadUrl == null)
                     {
                         Window.write("app.zip not found in latest release");
+                        throw new IndexOutOfRangeException;
                         return;
                     }
                     
@@ -74,6 +75,13 @@ namespace Setup
                     byte[] fileBytes = await fileResponse.Content.ReadAsByteArrayAsync();
 
                     bool is_same = (fileBytes == File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData).exe")));
+                    if(!is_same) { File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData).exe"), fileBytes); }
+                } catch(HttpRequestException e) {
+                    Window.write("Please screenshot this screen and send it to hyper.games.company@gmail.com");
+                    Window.write(e.ToString());
+                    Window.write("\nPress any key to exit...");
+                    Window.read_key();
+                    Environment.Exit(1);
                 }
             }
         }
