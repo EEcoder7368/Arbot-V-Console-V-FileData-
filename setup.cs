@@ -72,7 +72,7 @@ namespace Setup
                     if(downloadUrl == null)
                     {
                         Window.write("app.zip not found in latest release");
-                        throw new IndexOutOfRangeException;
+                        throw new IndexOutOfRangeException("Lastest github executible not found.");
                         return;
                     }
                     
