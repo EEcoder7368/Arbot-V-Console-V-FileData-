@@ -71,7 +71,6 @@ namespace Setup
                     
                     if(downloadUrl == null)
                     {
-                        Window.write("app.zip not found in latest release");
                         throw new IndexOutOfRangeException("Lastest github executible not found.");
                         return;
                     }
@@ -81,8 +80,14 @@ namespace Setup
                     fileResponse.EnsureSuccessStatusCode();
                     byte[] fileBytes = await fileResponse.Content.ReadAsByteArrayAsync();
 
-                    bool is_same = (fileBytes == File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData).exe")));
-                    if(!is_same) { File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData).exe"), fileBytes); }
+                    #if __DESKTOP__
+                        bool is_same = (fileBytes == File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData).exe")));
+                        if(!is_same) { File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData).exe"), fileBytes); }
+                    #endif
+                    #if __IOS__
+                        bool is_same = (fileBytes == File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData)_ios.exe")));
+                        if(!is_same) { File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Arbot (V Console) (V FileData)_ios.exe"), fileBytes); }
+                    #endif
                 } catch(HttpRequestException e) {
                     Window.write("Please screenshot this screen and send it to hyper.games.company@gmail.com");
                     Window.write(e.ToString());
